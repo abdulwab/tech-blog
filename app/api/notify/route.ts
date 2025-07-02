@@ -3,6 +3,8 @@ import { auth } from '@clerk/nextjs'
 import { prisma } from '@/lib/prisma'
 import { sendEmail, createNewPostEmailTemplate } from '@/lib/email'
 
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   try {
     // Check if user is authenticated
