@@ -22,19 +22,29 @@ export default async function BlogPage({
   }
 
   // Fetch posts and categories
-  const [posts, categories] = await Promise.all([
-    prisma.post.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-    }),
-    prisma.post.groupBy({
-      by: ['category'],
-      where: { isPublished: true },
-      _count: {
-        category: true,
-      },
-    }),
-  ])
+  let posts: any[] = []
+  let categories: any[] = []
+  
+  try {
+    const [postsData, categoriesData] = await Promise.all([
+      prisma.post.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.post.groupBy({
+        by: ['category'],
+        where: { isPublished: true },
+        _count: {
+          category: true,
+        },
+      }),
+    ])
+    posts = postsData
+    categories = categoriesData
+  } catch (error) {
+    console.log('Database not available during build, rendering with empty data')
+    // Will render with empty arrays
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -171,7 +181,7 @@ export default async function BlogPage({
                       {/* Tags */}
                       {post.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-4">
-                          {post.tags.slice(0, 3).map((tag) => (
+                          {post.tags.slice(0, 3).map((tag: string) => (
                             <span
                               key={tag}
                               className="inline-flex items-center text-xs text-gray-500"

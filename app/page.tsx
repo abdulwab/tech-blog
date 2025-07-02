@@ -7,18 +7,28 @@ import { ArrowRight, Calendar, User } from 'lucide-react'
 
 export default async function HomePage() {
   // Fetch featured and recent posts
-  const [featuredPosts, recentPosts] = await Promise.all([
-    prisma.post.findMany({
-      where: { isPublished: true, isFeatured: true },
-      orderBy: { createdAt: 'desc' },
-      take: 3,
-    }),
-    prisma.post.findMany({
-      where: { isPublished: true },
-      orderBy: { createdAt: 'desc' },
-      take: 6,
-    }),
-  ])
+  let featuredPosts: any[] = []
+  let recentPosts: any[] = []
+  
+  try {
+    const [featured, recent] = await Promise.all([
+      prisma.post.findMany({
+        where: { isPublished: true, isFeatured: true },
+        orderBy: { createdAt: 'desc' },
+        take: 3,
+      }),
+      prisma.post.findMany({
+        where: { isPublished: true },
+        orderBy: { createdAt: 'desc' },
+        take: 6,
+      }),
+    ])
+    featuredPosts = featured
+    recentPosts = recent
+  } catch (error) {
+    console.log('Database not available during build, rendering with empty data')
+    // Will render with empty arrays, causing sections to be hidden
+  }
 
   return (
     <div className="min-h-screen">

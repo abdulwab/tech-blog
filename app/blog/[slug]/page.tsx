@@ -14,55 +14,70 @@ interface PageProps {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const post = await prisma.post.findUnique({
-    where: { slug: params.slug, isPublished: true },
-  })
+  try {
+    const post = await prisma.post.findUnique({
+      where: { slug: params.slug, isPublished: true },
+    })
 
-  if (!post) {
-    return {
-      title: 'Post Not Found',
+    if (!post) {
+      return {
+        title: 'Post Not Found',
+      }
     }
-  }
 
-  return {
-    title: post.title,
-    description: post.description,
-    keywords: post.tags.join(', '),
-    authors: [{ name: post.author }],
-    openGraph: {
+    return {
       title: post.title,
       description: post.description,
-      type: 'article',
-      publishedTime: post.createdAt.toISOString(),
-      authors: [post.author],
-      images: [
-        {
-          url: post.coverImage,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.description,
-      images: [post.coverImage],
-    },
+      keywords: post.tags.join(', '),
+      authors: [{ name: post.author }],
+      openGraph: {
+        title: post.title,
+        description: post.description,
+        type: 'article',
+        publishedTime: post.createdAt.toISOString(),
+        authors: [post.author],
+        images: [
+          {
+            url: post.coverImage,
+            width: 1200,
+            height: 630,
+            alt: post.title,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: post.title,
+        description: post.description,
+        images: [post.coverImage],
+      },
+    }
+  } catch (error) {
+    // If database is not available during build, return basic metadata
+    return {
+      title: 'TechBlog Post',
+      description: 'Read the latest tech articles on our blog',
+    }
   }
 }
 
 // Generate static params for static generation
 export async function generateStaticParams() {
-  const posts = await prisma.post.findMany({
-    where: { isPublished: true },
-    select: { slug: true },
-  })
+  try {
+    const posts = await prisma.post.findMany({
+      where: { isPublished: true },
+      select: { slug: true },
+    })
 
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
+    return posts.map((post) => ({
+      slug: post.slug,
+    }))
+  } catch (error) {
+    // If database is not available during build (e.g., on Vercel), return empty array
+    // Pages will be generated dynamically at runtime instead
+    console.log('Database not available during build, using dynamic generation')
+    return []
+  }
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
