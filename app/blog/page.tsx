@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import { formatDate, truncateText } from '@/lib/utils'
 import { Calendar, User, Tag } from 'lucide-react'
+import CategorySelect from "@/components/CategorySelect";
 
 interface SearchParams {
   category?: string
@@ -117,23 +118,8 @@ export default async function BlogPage({
           <main className="lg:col-span-9">
             {/* Mobile Category Filter */}
             <div className="lg:hidden mb-6">
-              <select
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={category || ''}
-                onChange={(e) => {
-                  const newCategory = e.target.value
-                  const url = newCategory ? `/blog?category=${newCategory}` : '/blog'
-                  window.location.href = url
-                }}
-              >
-                <option value="">All Categories</option>
-                {categories.map((cat) => (
-                  <option key={cat.category} value={cat.category}>
-                    {cat.category.replace('-', ' ')} ({cat._count.category})
-                  </option>
-                ))}
-              </select>
-            </div>
+  <CategorySelect categories={categories} currentCategory={category} />
+</div>
 
             {/* Posts Grid */}
             {posts.length > 0 ? (
