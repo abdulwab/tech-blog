@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { logActivity } from '@/lib/activity'
 
 export const runtime = 'nodejs'
 
@@ -32,6 +33,20 @@ export async function POST(request: NextRequest) {
           where: { email },
           data: { isActive: true }
         })
+
+        // Log activity
+        await logActivity({
+          type: 'subscriber_activated',
+          title: `Subscriber reactivated: ${email}`,
+          details: `Subscriber reactivated their subscription through the website`,
+          metadata: {
+            subscriberId: existingSubscriber.id,
+            email: email,
+            source: 'website_form',
+            action: 'reactivated'
+          }
+        })
+
         return NextResponse.json(
           { message: 'Subscription reactivated successfully' },
           { status: 200 }

@@ -8,6 +8,7 @@ export type ActivityType =
   | 'post_featured'
   | 'post_unfeatured'
   | 'subscriber_added'
+  | 'subscriber_updated'
   | 'subscriber_removed'
   | 'subscriber_activated'
   | 'subscriber_deactivated'
@@ -65,6 +66,7 @@ export function getActivityIcon(type: ActivityType): string {
     case 'post_unfeatured':
       return 'Star'
     case 'subscriber_added':
+    case 'subscriber_updated':
     case 'subscriber_activated':
       return 'Users'
     case 'subscriber_removed':
@@ -97,6 +99,7 @@ export function getActivityColor(type: ActivityType): string {
       return 'bg-blue-100 text-blue-600'
     case 'post_published':
     case 'subscriber_added':
+    case 'subscriber_updated':
     case 'subscriber_activated':
     case 'notification_sent':
       return 'bg-green-100 text-green-600'

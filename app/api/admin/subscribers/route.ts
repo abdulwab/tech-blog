@@ -216,9 +216,30 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Subscriber ID is required' }, { status: 400 })
     }
 
+    // Get subscriber details before deletion for logging
+    const subscriberToDelete = await prisma.subscriber.findUnique({
+      where: { id },
+      select: { email: true, isActive: true }
+    })
+
     await prisma.subscriber.delete({
       where: { id }
     })
+
+    // Log activity
+    if (subscriberToDelete) {
+      await logActivity({
+        type: 'subscriber_removed',
+        title: `Subscriber removed: ${subscriberToDelete.email}`,
+        details: `Subscriber permanently deleted from the system`,
+        metadata: {
+          subscriberId: id,
+          email: subscriberToDelete.email,
+          wasActive: subscriberToDelete.isActive
+        },
+        createdBy: userId
+      })
+    }
 
     return NextResponse.json({ message: 'Subscriber deleted successfully' })
   } catch (error) {
