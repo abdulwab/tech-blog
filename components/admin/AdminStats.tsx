@@ -14,6 +14,7 @@ import {
   AlertCircle,
   RefreshCw
 } from 'lucide-react'
+import Tooltip from '../Tooltip'
 
 interface AdminStatsProps {
   stats: {

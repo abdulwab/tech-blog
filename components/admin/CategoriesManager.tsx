@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Plus, Edit3, Trash2, Tag, Palette, Hash } from 'lucide-react'
+import Tooltip from '../Tooltip'
 
 interface Category {
   id: string
@@ -146,13 +147,15 @@ export default function CategoriesManager() {
             Manage your blog categories ({categories.length} total)
           </p>
         </div>
-        <button
-          onClick={() => setShowForm(true)}
-          className="bg-[var(--accent-web)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-web-dark)] transition-colors flex items-center space-x-2"
-        >
-          <Plus className="h-4 w-4" />
-          <span>Add Category</span>
-        </button>
+        <Tooltip content="Create a new blog category" position="bottom">
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-[var(--accent-web)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-web-dark)] transition-colors flex items-center space-x-2"
+          >
+            <Plus className="h-4 w-4" />
+            <span>Add Category</span>
+          </button>
+        </Tooltip>
       </div>
 
       {/* Form Modal */}
@@ -168,38 +171,44 @@ export default function CategoriesManager() {
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                   Name
                 </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => handleNameChange(e.target.value)}
-                  className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                  required
-                />
+                <Tooltip content="Enter the category name - slug will be auto-generated" position="top">
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => handleNameChange(e.target.value)}
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                    required
+                  />
+                </Tooltip>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                   Slug
                 </label>
-                <input
-                  type="text"
-                  value={formData.slug}
-                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                  required
-                />
+                <Tooltip content="URL-friendly version of the category name for permalinks" position="top">
+                  <input
+                    type="text"
+                    value={formData.slug}
+                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                    required
+                  />
+                </Tooltip>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                   Description
                 </label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                />
+                <Tooltip content="Optional description of what this category contains" position="top">
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                  />
+                </Tooltip>
               </div>
 
               <div>
@@ -207,23 +216,26 @@ export default function CategoriesManager() {
                   Color
                 </label>
                 <div className="flex items-center space-x-2">
-                  <input
-                    type="color"
-                    value={formData.color}
-                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                    className="w-12 h-10 border border-[var(--border-primary)] rounded-md cursor-pointer"
-                  />
+                  <Tooltip content="Pick a custom color for this category" position="top">
+                    <input
+                      type="color"
+                      value={formData.color}
+                      onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                      className="w-12 h-10 border border-[var(--border-primary)] rounded-md cursor-pointer"
+                    />
+                  </Tooltip>
                   <div className="flex flex-wrap gap-2">
                     {predefinedColors.map((color) => (
-                      <button
-                        key={color}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, color })}
-                        className={`w-6 h-6 rounded-full border-2 ${
-                          formData.color === color ? 'border-[var(--text-primary)]' : 'border-[var(--border-primary)]'
-                        }`}
-                        style={{ backgroundColor: color }}
-                      />
+                      <Tooltip key={color} content={`Select ${color} as category color`} position="top">
+                        <button
+                          type="button"
+                          onClick={() => setFormData({ ...formData, color })}
+                          className={`w-6 h-6 rounded-full border-2 ${
+                            formData.color === color ? 'border-[var(--text-primary)]' : 'border-[var(--border-primary)]'
+                          }`}
+                          style={{ backgroundColor: color }}
+                        />
+                      </Tooltip>
                     ))}
                   </div>
                 </div>
@@ -233,29 +245,35 @@ export default function CategoriesManager() {
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                   Icon (optional)
                 </label>
-                <input
-                  type="text"
-                  value={formData.icon}
-                  onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                  placeholder="e.g., 💻, 🤖, 🔗"
-                  className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                />
+                <Tooltip content="Add an emoji or icon to represent this category" position="top">
+                  <input
+                    type="text"
+                    value={formData.icon}
+                    onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                    placeholder="e.g., 💻, 🤖, 🔗"
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                  />
+                </Tooltip>
               </div>
 
               <div className="flex justify-end space-x-3 pt-4">
-                <button
-                  type="button"
-                  onClick={resetForm}
-                  className="px-4 py-2 border border-[var(--border-primary)] rounded-md text-[var(--text-primary)] hover:bg-[var(--hover-bg)] transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-[var(--accent-web)] text-white rounded-md hover:bg-[var(--accent-web-dark)] transition-colors"
-                >
-                  {editingCategory ? 'Update' : 'Create'}
-                </button>
+                <Tooltip content="Cancel category creation and close form" position="top">
+                  <button
+                    type="button"
+                    onClick={resetForm}
+                    className="px-4 py-2 border border-[var(--border-primary)] rounded-md text-[var(--text-primary)] hover:bg-[var(--hover-bg)] transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </Tooltip>
+                <Tooltip content={editingCategory ? 'Save category changes' : 'Create new category'} position="top">
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-[var(--accent-web)] text-white rounded-md hover:bg-[var(--accent-web-dark)] transition-colors"
+                  >
+                    {editingCategory ? 'Update' : 'Create'}
+                  </button>
+                </Tooltip>
               </div>
             </form>
           </div>
@@ -295,18 +313,22 @@ export default function CategoriesManager() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => handleEdit(category)}
-                    className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
-                  >
-                    <Edit3 className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(category.id)}
-                    className="text-[var(--text-secondary)] hover:text-red-600 transition-colors"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  <Tooltip content="Edit this category" position="left">
+                    <button
+                      onClick={() => handleEdit(category)}
+                      className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
+                    >
+                      <Edit3 className="h-4 w-4" />
+                    </button>
+                  </Tooltip>
+                  <Tooltip content="Delete this category" position="left">
+                    <button
+                      onClick={() => handleDelete(category.id)}
+                      className="text-[var(--text-secondary)] hover:text-red-600 transition-colors"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </Tooltip>
                 </div>
               </div>
               

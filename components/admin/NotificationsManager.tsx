@@ -15,6 +15,7 @@ import {
   Eye,
   PlusCircle 
 } from 'lucide-react'
+import Tooltip from '../Tooltip'
 
 interface EmailNotification {
   id: string
@@ -258,28 +259,32 @@ export default function NotificationsManager() {
             Manage your email campaigns and notifications ({subscriberCount} subscribers)
           </p>
         </div>
-        <button
-          onClick={() => setShowForm(true)}
-          className="bg-[var(--accent-web)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-web-dark)] transition-colors flex items-center space-x-2"
-        >
-          <Plus className="h-4 w-4" />
-          <span>Create Notification</span>
-        </button>
+        <Tooltip content="Create a new email notification campaign" position="bottom">
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-[var(--accent-web)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-web-dark)] transition-colors flex items-center space-x-2"
+          >
+            <Plus className="h-4 w-4" />
+            <span>Create Notification</span>
+          </button>
+        </Tooltip>
       </div>
 
       {/* Filter */}
       <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-4">
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-        >
-          <option value="all">All Status</option>
-          <option value="draft">Draft</option>
-          <option value="scheduled">Scheduled</option>
-          <option value="sent">Sent</option>
-          <option value="failed">Failed</option>
-        </select>
+        <Tooltip content="Filter notifications by status" position="top">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+          >
+            <option value="all">All Status</option>
+            <option value="draft">Draft</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="sent">Sent</option>
+            <option value="failed">Failed</option>
+          </select>
+        </Tooltip>
       </div>
 
       {/* Form Modal */}
@@ -295,42 +300,48 @@ export default function NotificationsManager() {
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                   Subject
                 </label>
-                <input
-                  type="text"
-                  value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                  required
-                />
+                <Tooltip content="Enter the email subject line" position="top">
+                  <input
+                    type="text"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                    required
+                  />
+                </Tooltip>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                   Content
                 </label>
-                <textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  rows={8}
-                  className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                  placeholder="You can use HTML tags for formatting..."
-                  required
-                />
+                <Tooltip content="Write your email content - HTML tags are supported for formatting" position="top">
+                  <textarea
+                    value={formData.content}
+                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    rows={8}
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                    placeholder="You can use HTML tags for formatting..."
+                    required
+                  />
+                </Tooltip>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                   Recipients
                 </label>
-                <select
-                  value={formData.recipientType}
-                  onChange={(e) => setFormData({ ...formData, recipientType: e.target.value as 'all' | 'active' | 'specific' })}
-                  className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                >
-                  <option value="all">All Subscribers</option>
-                  <option value="active">Active Subscribers Only</option>
-                  <option value="specific">Specific Recipients</option>
-                </select>
+                <Tooltip content="Choose who should receive this notification" position="top">
+                  <select
+                    value={formData.recipientType}
+                    onChange={(e) => setFormData({ ...formData, recipientType: e.target.value as 'all' | 'active' | 'specific' })}
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                  >
+                    <option value="all">All Subscribers</option>
+                    <option value="active">Active Subscribers Only</option>
+                    <option value="specific">Specific Recipients</option>
+                  </select>
+                </Tooltip>
               </div>
 
               {formData.recipientType === 'specific' && (
@@ -338,16 +349,18 @@ export default function NotificationsManager() {
                   <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                     Email Addresses (one per line)
                   </label>
-                  <textarea
-                    value={formData.recipientList.join('\n')}
-                    onChange={(e) => setFormData({ 
-                      ...formData, 
-                      recipientList: e.target.value.split('\n').filter(email => email.trim()) 
-                    })}
-                    rows={4}
-                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                    placeholder="user@example.com"
-                  />
+                  <Tooltip content="Enter specific email addresses, one per line" position="top">
+                    <textarea
+                      value={formData.recipientList.join('\n')}
+                      onChange={(e) => setFormData({ 
+                        ...formData, 
+                        recipientList: e.target.value.split('\n').filter(email => email.trim()) 
+                      })}
+                      rows={4}
+                      className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                      placeholder="user@example.com"
+                    />
+                  </Tooltip>
                 </div>
               )}
 
@@ -355,31 +368,37 @@ export default function NotificationsManager() {
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                   Schedule (optional)
                 </label>
-                <input
-                  type="datetime-local"
-                  value={formData.scheduledAt}
-                  onChange={(e) => setFormData({ ...formData, scheduledAt: e.target.value })}
-                  className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                />
+                <Tooltip content="Schedule when to send this notification - leave empty to save as draft" position="top">
+                  <input
+                    type="datetime-local"
+                    value={formData.scheduledAt}
+                    onChange={(e) => setFormData({ ...formData, scheduledAt: e.target.value })}
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                  />
+                </Tooltip>
                 <p className="text-sm text-[var(--text-secondary)] mt-1">
                   Leave empty to save as draft
                 </p>
               </div>
 
               <div className="flex justify-end space-x-3 pt-4">
-                <button
-                  type="button"
-                  onClick={resetForm}
-                  className="px-4 py-2 border border-[var(--border-primary)] rounded-md text-[var(--text-primary)] hover:bg-[var(--hover-bg)] transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-[var(--accent-web)] text-white rounded-md hover:bg-[var(--accent-web-dark)] transition-colors"
-                >
-                  {editingNotification ? 'Update' : 'Create'}
-                </button>
+                <Tooltip content="Cancel and close the notification form" position="top">
+                  <button
+                    type="button"
+                    onClick={resetForm}
+                    className="px-4 py-2 border border-[var(--border-primary)] rounded-md text-[var(--text-primary)] hover:bg-[var(--hover-bg)] transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </Tooltip>
+                <Tooltip content={editingNotification ? 'Update notification' : 'Create notification'} position="top">
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-[var(--accent-web)] text-white rounded-md hover:bg-[var(--accent-web-dark)] transition-colors"
+                  >
+                    {editingNotification ? 'Update' : 'Create'}
+                  </button>
+                </Tooltip>
               </div>
             </form>
           </div>
@@ -493,33 +512,38 @@ export default function NotificationsManager() {
               Showing {((pagination.page - 1) * pagination.limit) + 1} to {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} notifications
             </div>
             <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-1 border border-[var(--border-primary)] rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed text-[var(--text-primary)] hover:bg-[var(--hover-bg)]"
-              >
-                Previous
-              </button>
-              {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(page => (
+              <Tooltip content="Go to previous page" position="top">
                 <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 border rounded-md text-sm ${
-                    currentPage === page
-                      ? 'border-[var(--accent-web)] bg-[var(--accent-web)] text-white'
-                      : 'border-[var(--border-primary)] text-[var(--text-primary)] hover:bg-[var(--hover-bg)]'
-                  }`}
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 border border-[var(--border-primary)] rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed text-[var(--text-primary)] hover:bg-[var(--hover-bg)]"
                 >
-                  {page}
+                  Previous
                 </button>
+              </Tooltip>
+              {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(page => (
+                <Tooltip key={page} content={`Go to page ${page}`} position="top">
+                  <button
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 border rounded-md text-sm ${
+                      currentPage === page
+                        ? 'border-[var(--accent-web)] bg-[var(--accent-web)] text-white'
+                        : 'border-[var(--border-primary)] text-[var(--text-primary)] hover:bg-[var(--hover-bg)]'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                </Tooltip>
               ))}
-              <button
-                onClick={() => setCurrentPage(Math.min(pagination.pages, currentPage + 1))}
-                disabled={currentPage === pagination.pages}
-                className="px-3 py-1 border border-[var(--border-primary)] rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed text-[var(--text-primary)] hover:bg-[var(--hover-bg)]"
-              >
-                Next
-              </button>
+              <Tooltip content="Go to next page" position="top">
+                <button
+                  onClick={() => setCurrentPage(Math.min(pagination.pages, currentPage + 1))}
+                  disabled={currentPage === pagination.pages}
+                  className="px-3 py-1 border border-[var(--border-primary)] rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed text-[var(--text-primary)] hover:bg-[var(--hover-bg)]"
+                >
+                  Next
+                </button>
+              </Tooltip>
             </div>
           </div>
         )}
