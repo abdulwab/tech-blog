@@ -16,6 +16,8 @@ import {
 } from 'lucide-react'
 import Tooltip from '../Tooltip'
 
+type Tab = 'overview' | 'posts' | 'categories' | 'notifications' | 'settings'
+
 interface AdminStatsProps {
   stats: {
     totalPosts: number
@@ -26,7 +28,7 @@ interface AdminStatsProps {
     pendingNotifications: number
   }
   onRefresh: () => void
-  onNavigateToTab: (tab: string) => void
+  onNavigateToTab: (tab: Tab) => void
 }
 
 export default function AdminStats({ stats, onRefresh, onNavigateToTab }: AdminStatsProps) {
