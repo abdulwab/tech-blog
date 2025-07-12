@@ -62,6 +62,19 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    // Log activity
+    await logActivity({
+      type: 'subscriber_added',
+      title: `New subscriber joined: ${email}`,
+      details: `New subscriber joined through the website subscription form`,
+      metadata: {
+        subscriberId: subscriber.id,
+        email: email,
+        source: 'website_form',
+        action: 'subscribed'
+      }
+    })
+
     return NextResponse.json(
       { message: 'Successfully subscribed to newsletter' },
       { status: 201 }
@@ -87,11 +100,31 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
+    // Get subscriber details before deactivation
+    const subscriber = await prisma.subscriber.findUnique({
+      where: { email }
+    })
+
     // Deactivate subscription instead of deleting
     await prisma.subscriber.update({
       where: { email },
       data: { isActive: false }
     })
+
+    // Log activity
+    if (subscriber) {
+      await logActivity({
+        type: 'subscriber_deactivated',
+        title: `Subscriber unsubscribed: ${email}`,
+        details: `Subscriber unsubscribed through the website`,
+        metadata: {
+          subscriberId: subscriber.id,
+          email: email,
+          source: 'website_form',
+          action: 'unsubscribed'
+        }
+      })
+    }
 
     return NextResponse.json(
       { message: 'Successfully unsubscribed' },
