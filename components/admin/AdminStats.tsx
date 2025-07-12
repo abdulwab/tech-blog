@@ -26,9 +26,10 @@ interface AdminStatsProps {
     pendingNotifications: number
   }
   onRefresh: () => void
+  onNavigateToTab: (tab: string) => void
 }
 
-export default function AdminStats({ stats, onRefresh }: AdminStatsProps) {
+export default function AdminStats({ stats, onRefresh, onNavigateToTab }: AdminStatsProps) {
   const [refreshing, setRefreshing] = useState(false)
 
   const handleRefresh = async () => {
@@ -152,26 +153,38 @@ export default function AdminStats({ stats, onRefresh }: AdminStatsProps) {
           Quick Actions
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Tooltip content="Create a new blog post" position="top">
-            <button className="bg-[var(--accent-web)] text-white p-4 rounded-lg hover:bg-[var(--accent-web-dark)] transition-colors flex items-center space-x-2">
+          <Tooltip content="Navigate to posts section to create a new blog post" position="top">
+            <button 
+              onClick={() => onNavigateToTab('posts')}
+              className="bg-[var(--accent-web)] text-white p-4 rounded-lg hover:bg-[var(--accent-web-dark)] transition-colors flex items-center space-x-2"
+            >
               <FileText className="h-5 w-5" />
               <span>Create Post</span>
             </button>
           </Tooltip>
-          <Tooltip content="Add a new category to organize posts" position="top">
-            <button className="bg-[var(--accent-iot)] text-white p-4 rounded-lg hover:bg-[var(--accent-iot-dark)] transition-colors flex items-center space-x-2">
+          <Tooltip content="Navigate to categories section to add a new category" position="top">
+            <button 
+              onClick={() => onNavigateToTab('categories')}
+              className="bg-[var(--accent-iot)] text-white p-4 rounded-lg hover:bg-[var(--accent-iot-dark)] transition-colors flex items-center space-x-2"
+            >
               <Tag className="h-5 w-5" />
               <span>Add Category</span>
             </button>
           </Tooltip>
-          <Tooltip content="Send a newsletter to all subscribers" position="top">
-            <button className="bg-[var(--accent-ai)] text-white p-4 rounded-lg hover:bg-[var(--accent-ai-dark)] transition-colors flex items-center space-x-2">
+          <Tooltip content="Navigate to notifications section to send a newsletter" position="top">
+            <button 
+              onClick={() => onNavigateToTab('notifications')}
+              className="bg-[var(--accent-ai)] text-white p-4 rounded-lg hover:bg-[var(--accent-ai-dark)] transition-colors flex items-center space-x-2"
+            >
               <Mail className="h-5 w-5" />
               <span>Send Newsletter</span>
             </button>
           </Tooltip>
-          <Tooltip content="View and manage email subscribers" position="top">
-            <button className="bg-[var(--accent-mobile)] text-white p-4 rounded-lg hover:bg-[var(--accent-mobile-dark)] transition-colors flex items-center space-x-2">
+          <Tooltip content="Navigate to settings section to manage subscribers" position="top">
+            <button 
+              onClick={() => onNavigateToTab('settings')}
+              className="bg-[var(--accent-mobile)] text-white p-4 rounded-lg hover:bg-[var(--accent-mobile-dark)] transition-colors flex items-center space-x-2"
+            >
               <Users className="h-5 w-5" />
               <span>View Subscribers</span>
             </button>

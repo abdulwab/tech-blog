@@ -71,7 +71,7 @@ export default function AdminDashboard({ initialTab = 'overview' }: AdminDashboa
   const renderContent = () => {
     switch (activeTab) {
       case 'overview':
-        return <AdminStats stats={stats} onRefresh={fetchStats} />
+        return <AdminStats stats={stats} onRefresh={fetchStats} onNavigateToTab={setActiveTab} />
       case 'posts':
         return <PostsManager />
       case 'categories':
@@ -81,7 +81,7 @@ export default function AdminDashboard({ initialTab = 'overview' }: AdminDashboa
       case 'settings':
         return <AdminSettings />
       default:
-        return <AdminStats stats={stats} onRefresh={fetchStats} />
+        return <AdminStats stats={stats} onRefresh={fetchStats} onNavigateToTab={setActiveTab} />
     }
   }
 
