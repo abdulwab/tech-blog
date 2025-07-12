@@ -16,6 +16,7 @@ export type ActivityType =
   | 'notification_sent'
   | 'notification_scheduled'
   | 'notification_failed'
+  | 'notification_deleted'
   | 'category_created'
   | 'category_updated'
   | 'category_deleted'
@@ -79,6 +80,8 @@ export function getActivityIcon(type: ActivityType): string {
       return 'Send'
     case 'notification_failed':
       return 'AlertCircle'
+    case 'notification_deleted':
+      return 'Trash2'
     case 'category_created':
     case 'category_updated':
       return 'Tag'
@@ -115,6 +118,8 @@ export function getActivityColor(type: ActivityType): string {
     case 'notification_created':
     case 'notification_scheduled':
       return 'bg-purple-100 text-purple-600'
+    case 'notification_deleted':
+      return 'bg-red-100 text-red-600'
     case 'category_created':
     case 'category_updated':
       return 'bg-indigo-100 text-indigo-600'

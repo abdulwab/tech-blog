@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@clerk/nextjs/server'
 import { Resend } from 'resend'
+import { logActivity } from '@/lib/activity'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -89,6 +90,22 @@ export async function POST(request: NextRequest) {
         sentCount,
         failedCount
       }
+    })
+
+    // Log activity
+    await logActivity({
+      type: 'notification_sent',
+      title: `Newsletter sent: "${notification.subject}"`,
+      details: `Newsletter successfully delivered to ${sentCount} subscribers${failedCount > 0 ? `, ${failedCount} failed` : ''}`,
+      metadata: {
+        notificationId: notification.id,
+        subject: notification.subject,
+        recipientCount: sentCount,
+        failedCount: failedCount,
+        totalRecipients: recipients.length,
+        recipientType: notification.recipientType
+      },
+      createdBy: userId
     })
 
     return NextResponse.json({

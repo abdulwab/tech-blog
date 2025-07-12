@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@clerk/nextjs/server'
+import { logActivity } from '@/lib/activity'
 
 // GET all email notifications
 export async function GET(request: NextRequest) {
@@ -69,6 +70,21 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    // Log activity
+    await logActivity({
+      type: 'notification_created',
+      title: `Created new newsletter draft: "${subject}"`,
+      details: `Prepared newsletter for ${recipientType} subscribers`,
+      metadata: {
+        notificationId: notification.id,
+        subject: notification.subject,
+        recipientType: notification.recipientType,
+        isScheduled: !!scheduledAt,
+        scheduledAt: scheduledAt
+      },
+      createdBy: userId
+    })
+
     return NextResponse.json(notification, { status: 201 })
   } catch (error) {
     console.error('Error creating notification:', error)
@@ -120,9 +136,31 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Notification ID required' }, { status: 400 })
     }
 
+    // Get notification details before deletion for logging
+    const notificationToDelete = await prisma.emailNotification.findUnique({
+      where: { id },
+      select: { subject: true, recipientType: true, status: true }
+    })
+
     await prisma.emailNotification.delete({
       where: { id }
     })
+
+    // Log activity
+    if (notificationToDelete) {
+      await logActivity({
+        type: 'notification_deleted',
+        title: `Deleted newsletter: "${notificationToDelete.subject}"`,
+        details: `Newsletter permanently removed from the system`,
+        metadata: {
+          notificationId: id,
+          subject: notificationToDelete.subject,
+          recipientType: notificationToDelete.recipientType,
+          status: notificationToDelete.status
+        },
+        createdBy: userId
+      })
+    }
 
     return NextResponse.json({ message: 'Notification deleted successfully' })
   } catch (error) {

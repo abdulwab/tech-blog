@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@clerk/nextjs/server'
+import { logActivity } from '@/lib/activity'
 
 // GET all categories
 export async function GET(request: NextRequest) {
@@ -56,6 +57,21 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    // Log activity
+    await logActivity({
+      type: 'category_created',
+      title: `Created new category: "${name}"`,
+      details: `Added new blog category for content organization`,
+      metadata: {
+        categoryId: category.id,
+        categoryName: category.name,
+        categorySlug: category.slug,
+        categoryColor: category.color,
+        categoryIcon: category.icon
+      },
+      createdBy: userId
+    })
+
     return NextResponse.json(category, { status: 201 })
   } catch (error) {
     console.error('Error creating category:', error)
@@ -104,6 +120,21 @@ export async function PUT(request: NextRequest) {
       }
     })
 
+    // Log activity
+    await logActivity({
+      type: 'category_updated',
+      title: `Updated category: "${name}"`,
+      details: `Category details and styling updated`,
+      metadata: {
+        categoryId: category.id,
+        categoryName: category.name,
+        categorySlug: category.slug,
+        categoryColor: category.color,
+        categoryIcon: category.icon
+      },
+      createdBy: userId
+    })
+
     return NextResponse.json(category)
   } catch (error) {
     console.error('Error updating category:', error)
@@ -126,14 +157,17 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Category ID required' }, { status: 400 })
     }
 
+    // Get category details before deletion for logging
+    const categoryToDelete = await prisma.category.findUnique({
+      where: { id },
+      select: { name: true, slug: true, color: true, icon: true }
+    })
+
     // Check if category is being used by any posts
     const postsUsingCategory = await prisma.post.findFirst({
       where: {
         category: {
-          in: await prisma.category.findUnique({
-            where: { id },
-            select: { name: true }
-          }).then(cat => cat ? [cat.name] : [])
+          in: categoryToDelete ? [categoryToDelete.name] : []
         }
       }
     })
@@ -147,6 +181,23 @@ export async function DELETE(request: NextRequest) {
     await prisma.category.delete({
       where: { id }
     })
+
+    // Log activity
+    if (categoryToDelete) {
+      await logActivity({
+        type: 'category_deleted',
+        title: `Deleted category: "${categoryToDelete.name}"`,
+        details: `Category permanently removed from the system`,
+        metadata: {
+          categoryId: id,
+          categoryName: categoryToDelete.name,
+          categorySlug: categoryToDelete.slug,
+          categoryColor: categoryToDelete.color,
+          categoryIcon: categoryToDelete.icon
+        },
+        createdBy: userId
+      })
+    }
 
     return NextResponse.json({ message: 'Category deleted successfully' })
   } catch (error) {
