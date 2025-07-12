@@ -22,6 +22,7 @@ import {
 import { formatDate } from '@/lib/utils'
 import Image from 'next/image'
 import Tooltip from '../Tooltip'
+import PostEditor from '../PostEditor'
 
 interface Post {
   id: string
@@ -63,6 +64,8 @@ export default function PostsManager() {
     pages: 0
   })
   const [selectedPosts, setSelectedPosts] = useState<string[]>([])
+  const [showForm, setShowForm] = useState(false)
+  const [editingPost, setEditingPost] = useState<Post | null>(null)
 
   // Fetch posts
   useEffect(() => {
@@ -174,6 +177,27 @@ export default function PostsManager() {
     }
   }
 
+  const handleCreatePost = () => {
+    setEditingPost(null)
+    setShowForm(true)
+  }
+
+  const handleEditPost = (post: Post) => {
+    setEditingPost(post)
+    setShowForm(true)
+  }
+
+  const handleFormSave = () => {
+    setShowForm(false)
+    setEditingPost(null)
+    fetchPosts()
+  }
+
+  const handleFormCancel = () => {
+    setShowForm(false)
+    setEditingPost(null)
+  }
+
   const getStatusBadge = (post: Post) => {
     if (post.isPublished) {
       return (
@@ -203,7 +227,10 @@ export default function PostsManager() {
           </p>
         </div>
         <Tooltip content="Create a new blog post" position="bottom">
-          <button className="bg-[var(--accent-web)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-web-dark)] transition-colors flex items-center space-x-2">
+          <button 
+            onClick={handleCreatePost}
+            className="bg-[var(--accent-web)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-web-dark)] transition-colors flex items-center space-x-2"
+          >
             <Plus className="h-4 w-4" />
             <span>Create Post</span>
           </button>

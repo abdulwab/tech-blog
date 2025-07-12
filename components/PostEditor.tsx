@@ -17,55 +17,68 @@ interface PostFormData {
   isPublished: boolean
 }
 
-export default function PostEditor() {
+interface PostEditorProps {
+  initialData?: PostFormData & { id?: string; slug?: string }
+  onSave?: () => void
+  onCancel?: () => void
+}
+
+export default function PostEditor({ initialData, onSave, onCancel }: PostEditorProps) {
   const [formData, setFormData] = useState<PostFormData>({
-    title: '',
-    description: '',
-    content: '',
-    coverImage: '',
-    author: '',
-    category: '',
-    tags: '',
-    isFeatured: false,
-    isPublished: false,
+    title: initialData?.title || '',
+    description: initialData?.description || '',
+    content: initialData?.content || '',
+    coverImage: initialData?.coverImage || '',
+    author: initialData?.author || '',
+    category: initialData?.category || '',
+    tags: initialData?.tags || '',
+    isFeatured: initialData?.isFeatured || false,
+    isPublished: initialData?.isPublished || false,
   })
   const [isLoading, setIsLoading] = useState(false)
   const [preview, setPreview] = useState(false)
+  const isEditing = Boolean(initialData?.id)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
-      const slug = createSlug(formData.title)
+      const slug = initialData?.slug || createSlug(formData.title)
       const tagsArray = formData.tags.split(',').map(tag => tag.trim()).filter(Boolean)
 
-      const response = await fetch('/api/posts', {
-        method: 'POST',
+      const url = isEditing ? '/api/admin/posts' : '/api/posts'
+      const method = isEditing ? 'PUT' : 'POST'
+      const body = isEditing 
+        ? { ...formData, id: initialData?.id, slug, tags: tagsArray }
+        : { ...formData, slug, tags: tagsArray }
+
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          slug,
-          tags: tagsArray,
-        }),
+        body: JSON.stringify(body),
       })
 
       if (response.ok) {
-        alert('Post created successfully!')
-        // Reset form
-        setFormData({
-          title: '',
-          description: '',
-          content: '',
-          coverImage: '',
-          author: '',
-          category: '',
-          tags: '',
-          isFeatured: false,
-          isPublished: false,
-        })
+        alert(`Post ${isEditing ? 'updated' : 'created'} successfully!`)
+        onSave?.()
+        
+        if (!isEditing) {
+          // Reset form only for new posts
+          setFormData({
+            title: '',
+            description: '',
+            content: '',
+            coverImage: '',
+            author: '',
+            category: '',
+            tags: '',
+            isFeatured: false,
+            isPublished: false,
+          })
+        }
       } else {
         const error = await response.json()
         alert(`Error: ${error.error}`)
@@ -98,7 +111,9 @@ export default function PostEditor() {
     <div className="max-w-4xl mx-auto p-6">
       <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-lg rounded-lg overflow-hidden">
         <div className="px-6 py-4 bg-[var(--background-secondary)] border-b border-[var(--border-primary)]">
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Create New Blog Post</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">
+            {isEditing ? 'Edit Blog Post' : 'Create New Blog Post'}
+          </h1>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
@@ -265,13 +280,22 @@ export default function PostEditor() {
 
           {/* Submit */}
           <div className="flex gap-4">
+            {onCancel && (
+              <button
+                type="button"
+                onClick={onCancel}
+                className="flex items-center px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-[var(--background)] transition-colors"
+              >
+                Cancel
+              </button>
+            )}
             <button
               type="submit"
               disabled={isLoading}
               className="flex items-center px-4 py-2 bg-[var(--accent-web)] text-white rounded-md hover:bg-[var(--accent-web-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] focus:ring-offset-2 focus:ring-offset-[var(--background)] disabled:opacity-50 transition-colors"
             >
               <Save className="h-4 w-4 mr-2" />
-              {isLoading ? 'Saving...' : 'Save Post'}
+              {isLoading ? 'Saving...' : (isEditing ? 'Update Post' : 'Save Post')}
             </button>
           </div>
         </form>
