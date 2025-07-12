@@ -79,4 +79,16 @@ model AdminSettings {
   updatedAt            DateTime @updatedAt
 
   @@map("admin_settings")
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  type      String   // 'post_created', 'post_published', 'post_updated', 'subscriber_added', 'notification_sent', 'category_created', etc.
+  title     String   // Human-readable title
+  details   String?  // Optional details about the activity
+  metadata  Json?    // Additional metadata (post id, subscriber email, etc.)
+  createdBy String?  // Admin user ID who performed the action
+  createdAt DateTime @default(now())
+
+  @@map("activity_logs")
 } 
