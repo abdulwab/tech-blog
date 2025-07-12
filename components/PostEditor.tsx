@@ -240,24 +240,24 @@ export default function PostEditor() {
 
           {/* Options */}
           <div className="flex flex-wrap gap-4">
-            <label className="flex items-center">
+            <label className="flex items-center text-[var(--text-primary)]">
               <input
                 type="checkbox"
                 name="isFeatured"
                 checked={formData.isFeatured}
                 onChange={handleChange}
-                className="mr-2"
+                className="mr-2 h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)] border-[var(--border-primary)] rounded"
               />
               Featured Post
             </label>
 
-            <label className="flex items-center">
+            <label className="flex items-center text-[var(--text-primary)]">
               <input
                 type="checkbox"
                 name="isPublished"
                 checked={formData.isPublished}
                 onChange={handleChange}
-                className="mr-2"
+                className="mr-2 h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)] border-[var(--border-primary)] rounded"
               />
               Publish Immediately
             </label>
@@ -268,7 +268,7 @@ export default function PostEditor() {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex items-center px-4 py-2 bg-[var(--accent-web)] text-white rounded-md hover:bg-[var(--accent-web-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-[var(--accent-web)] text-white rounded-md hover:bg-[var(--accent-web-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] focus:ring-offset-2 focus:ring-offset-[var(--background)] disabled:opacity-50 transition-colors"
             >
               <Save className="h-4 w-4 mr-2" />
               {isLoading ? 'Saving...' : 'Save Post'}
