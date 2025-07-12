@@ -1,6 +1,7 @@
 import Image from 'next/image'
-import { formatDate } from '@/lib/utils'
+import { formatDate, formatCategory, calculateReadingTime, formatReadingTime } from '@/lib/utils'
 import QuillContent from '@/components/QuillContent'
+import { Clock } from 'lucide-react'
 
 interface BlogPostProps {
   post: {
@@ -17,30 +18,37 @@ interface BlogPostProps {
 }
 
 export default function BlogPost({ post }: BlogPostProps) {
+  const readingTime = calculateReadingTime(post.content)
+  
   return (
-    <article className="max-w-4xl mx-auto px-4 py-8">
+    <article className="max-w-4xl mx-auto px-4 py-8 bg-[var(--background)] text-[var(--foreground)]">
       {/* Header */}
       <header className="mb-8">
         <div className="mb-4">
-          <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-            {post.category}
+          <span className="inline-block bg-[var(--accent-web)]/10 text-[var(--accent-web)] text-sm font-medium px-3 py-1 rounded-full">
+            {formatCategory(post.category)}
           </span>
         </div>
         
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+        <h1 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4 leading-tight">
           {post.title}
         </h1>
         
-        <p className="text-xl text-gray-600 mb-6">
+        <p className="text-xl text-[var(--text-secondary)] mb-6">
           {post.description}
         </p>
         
-        <div className="flex items-center text-sm text-gray-500 space-x-4">
+        <div className="flex items-center text-sm text-[var(--text-secondary)] space-x-4">
           <span>By {post.author}</span>
           <span>•</span>
           <time dateTime={post.createdAt.toISOString()}>
             {formatDate(post.createdAt)}
           </time>
+          <span>•</span>
+          <div className="flex items-center">
+            <Clock className="h-4 w-4 mr-1" />
+            {formatReadingTime(readingTime)}
+          </div>
         </div>
 
         {/* Tags */}
@@ -49,7 +57,7 @@ export default function BlogPost({ post }: BlogPostProps) {
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-block bg-gray-100 text-gray-700 text-xs font-medium px-2 py-1 rounded"
+                className="inline-block bg-[var(--background-secondary)] text-[var(--text-primary)] text-xs font-medium px-2 py-1 rounded border border-[var(--border-primary)]"
               >
                 #{tag}
               </span>
