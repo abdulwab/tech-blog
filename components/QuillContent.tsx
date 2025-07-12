@@ -53,24 +53,47 @@ export default function QuillContent({ content, className = '', onContentProcess
         switch (tagName) {
           case 'h1':
             element.className = 'text-3xl font-bold text-[var(--text-primary)] mt-8 mb-4 border-b border-[var(--border-primary)] pb-2 scroll-mt-24'
+            const h1Element = element as HTMLElement
+            h1Element.style.color = 'var(--text-primary)'
+            h1Element.style.lineHeight = '1.2'
             break
           case 'h2':
             element.className = 'text-2xl font-bold text-[var(--text-primary)] mt-7 mb-3 scroll-mt-24'
+            const h2Element = element as HTMLElement
+            h2Element.style.color = 'var(--text-primary)'
+            h2Element.style.lineHeight = '1.2'
             break
           case 'h3':
             element.className = 'text-xl font-semibold text-[var(--text-primary)] mt-6 mb-3 scroll-mt-24'
+            const h3Element = element as HTMLElement
+            h3Element.style.color = 'var(--text-primary)'
+            h3Element.style.lineHeight = '1.2'
             break
           case 'h4':
             element.className = 'text-lg font-semibold text-[var(--text-primary)] mt-5 mb-2 scroll-mt-24'
+            const h4Element = element as HTMLElement
+            h4Element.style.color = 'var(--text-primary)'
+            h4Element.style.lineHeight = '1.2'
             break
           case 'h5':
             element.className = 'text-base font-semibold text-[var(--text-primary)] mt-4 mb-2 scroll-mt-24'
+            const h5Element = element as HTMLElement
+            h5Element.style.color = 'var(--text-primary)'
+            h5Element.style.lineHeight = '1.2'
             break
           case 'h6':
             element.className = 'text-sm font-semibold text-[var(--text-primary)] mt-3 mb-2 scroll-mt-24'
+            const h6Element = element as HTMLElement
+            h6Element.style.color = 'var(--text-primary)'
+            h6Element.style.lineHeight = '1.2'
             break
           case 'p':
             element.className = 'text-[var(--text-primary)] leading-normal mb-4 text-base'
+            // Force color override for dark mode
+            const pElement = element as HTMLElement
+            pElement.style.color = 'var(--text-primary)'
+            pElement.style.lineHeight = '1.5'
+            pElement.style.marginBottom = '1rem'
             break
           case 'a':
             element.className = 'text-[var(--accent-web)] hover:text-[var(--accent-iot)] underline transition-colors'
@@ -80,12 +103,22 @@ export default function QuillContent({ content, className = '', onContentProcess
             break
           case 'ul':
             element.className = 'mb-4 pl-6 space-y-1 text-[var(--text-primary)]'
+            const ulElement = element as HTMLElement
+            ulElement.style.color = 'var(--text-primary)'
+            ulElement.style.marginBottom = '1rem'
             break
           case 'ol':
             element.className = 'mb-4 pl-6 space-y-1 text-[var(--text-primary)]'
+            const olElement = element as HTMLElement
+            olElement.style.color = 'var(--text-primary)'
+            olElement.style.marginBottom = '1rem'
             break
           case 'li':
             element.className = 'text-[var(--text-primary)] leading-normal'
+            const liElement = element as HTMLElement
+            liElement.style.color = 'var(--text-primary)'
+            liElement.style.lineHeight = '1.5'
+            liElement.style.marginBottom = '0.25rem'
             break
           case 'code':
             if (element.parentElement?.tagName === 'PRE') {
@@ -196,7 +229,11 @@ export default function QuillContent({ content, className = '', onContentProcess
   return (
     <div 
       ref={contentRef}
-      className={`prose prose-lg max-w-none ${className}`}
+      className={`prose prose-lg max-w-none text-[var(--text-primary)] ${className}`}
+      style={{
+        color: 'var(--text-primary)',
+        lineHeight: '1.5'
+      }}
       dangerouslySetInnerHTML={{ __html: processedContent }}
     />
   )
