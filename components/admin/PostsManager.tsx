@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import Image from 'next/image'
+import Tooltip from '../Tooltip'
 
 interface Post {
   id: string
@@ -201,10 +202,12 @@ export default function PostsManager() {
             Manage your blog posts ({pagination.total} total)
           </p>
         </div>
-        <button className="bg-[var(--accent-web)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-web-dark)] transition-colors flex items-center space-x-2">
-          <Plus className="h-4 w-4" />
-          <span>Create Post</span>
-        </button>
+        <Tooltip content="Create a new blog post" position="bottom">
+          <button className="bg-[var(--accent-web)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-web-dark)] transition-colors flex items-center space-x-2">
+            <Plus className="h-4 w-4" />
+            <span>Create Post</span>
+          </button>
+        </Tooltip>
       </div>
 
       {/* Filters */}
@@ -213,60 +216,70 @@ export default function PostsManager() {
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
-            <input
-              type="text"
-              placeholder="Search posts..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-            />
+            <Tooltip content="Search posts by title, description, or content" position="top">
+              <input
+                type="text"
+                placeholder="Search posts..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+              />
+            </Tooltip>
           </div>
 
           {/* Category Filter */}
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-          >
-            <option value="all">All Categories</option>
-            <option value="Web Development">Web Development</option>
-            <option value="AI">AI</option>
-            <option value="IoT">IoT</option>
-            <option value="Mobile">Mobile</option>
-            <option value="Blockchain">Blockchain</option>
-          </select>
+          <Tooltip content="Filter posts by category" position="top">
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+            >
+              <option value="all">All Categories</option>
+              <option value="Web Development">Web Development</option>
+              <option value="AI">AI</option>
+              <option value="IoT">IoT</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Blockchain">Blockchain</option>
+            </select>
+          </Tooltip>
 
           {/* Status Filter */}
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-          >
-            <option value="all">All Status</option>
-            <option value="published">Published</option>
-            <option value="draft">Draft</option>
-          </select>
+          <Tooltip content="Filter posts by publication status" position="top">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+            >
+              <option value="all">All Status</option>
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+            </select>
+          </Tooltip>
 
           {/* Featured Filter */}
-          <select
-            value={featuredFilter}
-            onChange={(e) => setFeaturedFilter(e.target.value)}
-            className="px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-          >
-            <option value="all">All Posts</option>
-            <option value="true">Featured</option>
-            <option value="false">Not Featured</option>
-          </select>
+          <Tooltip content="Filter posts by featured status" position="top">
+            <select
+              value={featuredFilter}
+              onChange={(e) => setFeaturedFilter(e.target.value)}
+              className="px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+            >
+              <option value="all">All Posts</option>
+              <option value="true">Featured</option>
+              <option value="false">Not Featured</option>
+            </select>
+          </Tooltip>
 
           {/* Bulk Actions */}
           {selectedPosts.length > 0 && (
-            <button
-              onClick={handleBulkDelete}
-              className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center space-x-2"
-            >
-              <Trash2 className="h-4 w-4" />
-              <span>Delete ({selectedPosts.length})</span>
-            </button>
+            <Tooltip content={`Delete ${selectedPosts.length} selected posts permanently`} position="top">
+              <button
+                onClick={handleBulkDelete}
+                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center space-x-2"
+              >
+                <Trash2 className="h-4 w-4" />
+                <span>Delete ({selectedPosts.length})</span>
+              </button>
+            </Tooltip>
           )}
         </div>
       </div>
@@ -278,18 +291,20 @@ export default function PostsManager() {
             <thead className="bg-[var(--background-secondary)]">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">
-                  <input
-                    type="checkbox"
-                    checked={selectedPosts.length === posts.length}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedPosts(posts.map(p => p.id))
-                      } else {
-                        setSelectedPosts([])
-                      }
-                    }}
-                    className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)]"
-                  />
+                  <Tooltip content="Select all posts for bulk actions" position="right">
+                    <input
+                      type="checkbox"
+                      checked={selectedPosts.length === posts.length}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedPosts(posts.map(p => p.id))
+                        } else {
+                          setSelectedPosts([])
+                        }
+                      }}
+                      className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)]"
+                    />
+                  </Tooltip>
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">
                   Post
