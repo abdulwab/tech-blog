@@ -343,18 +343,20 @@ export default function PostsManager() {
                 posts.map((post) => (
                   <tr key={post.id} className="hover:bg-[var(--hover-bg)]">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <input
-                        type="checkbox"
-                        checked={selectedPosts.includes(post.id)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedPosts([...selectedPosts, post.id])
-                          } else {
-                            setSelectedPosts(selectedPosts.filter(id => id !== post.id))
-                          }
-                        }}
-                        className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)]"
-                      />
+                      <Tooltip content="Select this post for bulk actions" position="right">
+                        <input
+                          type="checkbox"
+                          checked={selectedPosts.includes(post.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedPosts([...selectedPosts, post.id])
+                            } else {
+                              setSelectedPosts(selectedPosts.filter(id => id !== post.id))
+                            }
+                          }}
+                          className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)]"
+                        />
+                      </Tooltip>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -458,33 +460,38 @@ export default function PostsManager() {
               Showing {((pagination.page - 1) * pagination.limit) + 1} to {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} posts
             </div>
             <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-1 border border-[var(--border-primary)] rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed text-[var(--text-primary)] hover:bg-[var(--hover-bg)]"
-              >
-                Previous
-              </button>
-              {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(page => (
+              <Tooltip content="Go to previous page" position="top">
                 <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 border rounded-md text-sm ${
-                    currentPage === page
-                      ? 'border-[var(--accent-web)] bg-[var(--accent-web)] text-white'
-                      : 'border-[var(--border-primary)] text-[var(--text-primary)] hover:bg-[var(--hover-bg)]'
-                  }`}
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 border border-[var(--border-primary)] rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed text-[var(--text-primary)] hover:bg-[var(--hover-bg)]"
                 >
-                  {page}
+                  Previous
                 </button>
+              </Tooltip>
+              {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(page => (
+                <Tooltip key={page} content={`Go to page ${page}`} position="top">
+                  <button
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 border rounded-md text-sm ${
+                      currentPage === page
+                        ? 'border-[var(--accent-web)] bg-[var(--accent-web)] text-white'
+                        : 'border-[var(--border-primary)] text-[var(--text-primary)] hover:bg-[var(--hover-bg)]'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                </Tooltip>
               ))}
-              <button
-                onClick={() => setCurrentPage(Math.min(pagination.pages, currentPage + 1))}
-                disabled={currentPage === pagination.pages}
-                className="px-3 py-1 border border-[var(--border-primary)] rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed text-[var(--text-primary)] hover:bg-[var(--hover-bg)]"
-              >
-                Next
-              </button>
+              <Tooltip content="Go to next page" position="top">
+                <button
+                  onClick={() => setCurrentPage(Math.min(pagination.pages, currentPage + 1))}
+                  disabled={currentPage === pagination.pages}
+                  className="px-3 py-1 border border-[var(--border-primary)] rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed text-[var(--text-primary)] hover:bg-[var(--hover-bg)]"
+                >
+                  Next
+                </button>
+              </Tooltip>
             </div>
           </div>
         )}
