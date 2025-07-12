@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@clerk/nextjs/server'
+import { logActivity } from '@/lib/activity'
 
 // GET all posts for admin (includes unpublished)
 export async function GET(request: NextRequest) {
