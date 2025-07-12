@@ -1,24 +1,12 @@
 import { SignedIn, SignedOut, SignInButton } from '@clerk/nextjs'
-import PostEditor from '@/components/PostEditor'
+import AdminDashboard from '@/components/AdminDashboard'
 import { Shield } from 'lucide-react'
 
 export default function AdminPage() {
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <SignedIn>
-        <div className="py-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
-                Admin Dashboard
-              </h1>
-              <p className="text-[var(--text-secondary)]">
-                Create and manage your blog posts
-              </p>
-            </div>
-            <PostEditor />
-          </div>
-        </div>
+        <AdminDashboard />
       </SignedIn>
 
       <SignedOut>
