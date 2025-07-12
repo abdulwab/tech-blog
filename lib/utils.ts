@@ -21,4 +21,82 @@ export function formatDate(date: Date | string): string {
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text
   return text.slice(0, maxLength) + '...'
+}
+
+export function formatCategory(category: string): string {
+  // Map specific category slugs to their proper display names
+  const categoryMap: Record<string, string> = {
+    'web-development': 'Web Development',
+    'javascript': 'JavaScript',
+    'react': 'React',
+    'nextjs': 'Next.js',
+    'nodejs': 'Node.js',
+    'artificial-intelligence': 'Artificial Intelligence',
+    'machine-learning': 'Machine Learning',
+    'large-language-models': 'Large Language Models',
+    'iot': 'Internet of Things (IoT)',
+    'robotics': 'Robotics',
+    'data-science': 'Data Science',
+    'blockchain': 'Blockchain',
+    'cybersecurity': 'Cybersecurity',
+    'cloud-computing': 'Cloud Computing',
+    'devops': 'DevOps',
+    'mobile-development': 'Mobile Development',
+    'python': 'Python',
+    'tutorials': 'Tutorials',
+    'tips': 'Tips & Tricks',
+    'industry-trends': 'Industry Trends',
+    'tech-news': 'Tech News'
+  }
+  
+  return categoryMap[category] || category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+}
+
+export function getCategoryColor(category: string): string {
+  // Map categories to theme colors
+  const colorMap: Record<string, string> = {
+    'web-development': 'var(--accent-web)',
+    'javascript': 'var(--accent-web)',
+    'react': 'var(--accent-web)',
+    'nextjs': 'var(--accent-web)',
+    'nodejs': 'var(--accent-web)',
+    'artificial-intelligence': 'var(--accent-ai)',
+    'machine-learning': 'var(--accent-ai)',
+    'large-language-models': 'var(--accent-ai)',
+    'iot': 'var(--accent-iot)',
+    'robotics': 'var(--accent-iot)',
+    'data-science': 'var(--accent-ai)',
+    'blockchain': 'var(--accent-iot)',
+    'cybersecurity': 'var(--accent-mobile)',
+    'cloud-computing': 'var(--accent-iot)',
+    'devops': 'var(--accent-iot)',
+    'mobile-development': 'var(--accent-mobile)',
+    'python': 'var(--accent-ai)',
+    'tutorials': 'var(--accent-chatbot)',
+    'tips': 'var(--accent-chatbot)',
+    'industry-trends': 'var(--accent-web)',
+    'tech-news': 'var(--accent-web)'
+  }
+  
+  return colorMap[category] || 'var(--accent-web)'
+}
+
+export function calculateReadingTime(content: string): number {
+  // Strip HTML tags and count words
+  const plainText = content.replace(/<[^>]*>/g, ' ')
+  const words = plainText.trim().split(/\s+/).filter(word => word.length > 0)
+  const wordCount = words.length
+  
+  // Average reading speed is 200 words per minute
+  const readingSpeed = 200
+  const readingTime = Math.ceil(wordCount / readingSpeed)
+  
+  return Math.max(1, readingTime) // Minimum 1 minute
+}
+
+export function formatReadingTime(minutes: number): string {
+  if (minutes === 1) {
+    return '1 min read'
+  }
+  return `${minutes} min read`
 } 
