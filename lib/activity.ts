@@ -133,6 +133,9 @@ export function formatTimeAgo(date: Date): string {
   const diffMinutes = Math.floor(diffSeconds / 60)
   const diffHours = Math.floor(diffMinutes / 60)
   const diffDays = Math.floor(diffHours / 24)
+  const diffWeeks = Math.floor(diffDays / 7)
+  const diffMonths = Math.floor(diffDays / 30)
+  const diffYears = Math.floor(diffDays / 365)
 
   if (diffSeconds < 60) {
     return `${diffSeconds} second${diffSeconds !== 1 ? 's' : ''} ago`
@@ -142,7 +145,11 @@ export function formatTimeAgo(date: Date): string {
     return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`
   } else if (diffDays < 7) {
     return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`
+  } else if (diffWeeks < 4) {
+    return `${diffWeeks} week${diffWeeks !== 1 ? 's' : ''} ago`
+  } else if (diffMonths < 12) {
+    return `${diffMonths} month${diffMonths !== 1 ? 's' : ''} ago`
   } else {
-    return date.toLocaleDateString()
+    return `${diffYears} year${diffYears !== 1 ? 's' : ''} ago`
   }
 } 

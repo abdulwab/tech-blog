@@ -12,6 +12,7 @@
     "db:studio": "prisma studio",
     "seed:categories": "node scripts/seed-categories.js",
     "seed:activities": "node scripts/seed-activities.js",
+    "generate:real-activities": "node scripts/generate-real-activities.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {
