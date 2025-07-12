@@ -12,11 +12,26 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
+  Send,
+  Trash2,
+  UserX,
+  Bell
 } from 'lucide-react'
 import Tooltip from '../Tooltip'
+import { formatTimeAgo, getActivityColor, getActivityIcon } from '@/lib/activity'
 
 type Tab = 'overview' | 'posts' | 'categories' | 'notifications' | 'subscribers' | 'settings'
+
+interface Activity {
+  id: string
+  type: string
+  title: string
+  details: string | null
+  metadata: any
+  createdBy: string | null
+  createdAt: string
+}
 
 interface AdminStatsProps {
   stats: {
@@ -33,11 +48,60 @@ interface AdminStatsProps {
 
 export default function AdminStats({ stats, onRefresh, onNavigateToTab }: AdminStatsProps) {
   const [refreshing, setRefreshing] = useState(false)
+  const [activities, setActivities] = useState<Activity[]>([])
+  const [loadingActivities, setLoadingActivities] = useState(true)
+
+  // Fetch activities on component mount
+  useEffect(() => {
+    fetchActivities()
+  }, [])
+
+  const fetchActivities = async () => {
+    try {
+      setLoadingActivities(true)
+      const response = await fetch('/api/admin/activity?limit=5')
+      if (response.ok) {
+        const data = await response.json()
+        setActivities(data.activities)
+      }
+    } catch (error) {
+      console.error('Error fetching activities:', error)
+    } finally {
+      setLoadingActivities(false)
+    }
+  }
 
   const handleRefresh = async () => {
     setRefreshing(true)
     await onRefresh()
+    // Also refresh activities
+    await fetchActivities()
     setTimeout(() => setRefreshing(false), 1000)
+  }
+
+  const renderActivityIcon = (type: string) => {
+    const iconName = getActivityIcon(type as any)
+    const colorClass = getActivityColor(type as any)
+    
+    const IconComponent = {
+      FileText,
+      CheckCircle,
+      Trash2,
+      Star,
+      Users,
+      UserX,
+      Mail,
+      Send,
+      AlertCircle,
+      Tag,
+      Bell
+    }[iconName] || Bell
+
+    return (
+      <div className={`p-2 rounded-full ${colorClass}`}>
+        <IconComponent className="h-4 w-4" />
+      </div>
+    )
   }
 
   const statCards = [
@@ -200,45 +264,34 @@ export default function AdminStats({ stats, onRefresh, onNavigateToTab }: AdminS
           Recent Activity
         </h3>
         <div className="space-y-3">
-          <div className="flex items-center space-x-3 p-3 bg-[var(--background-secondary)] rounded-lg">
-            <div className="p-2 bg-green-100 rounded-full">
-              <CheckCircle className="h-4 w-4 text-green-600" />
+          {loadingActivities ? (
+            <div className="flex justify-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--accent-web)]"></div>
             </div>
-            <div>
-              <div className="text-sm font-medium text-[var(--text-primary)]">
-                New post published
-              </div>
-              <div className="text-xs text-[var(--text-secondary)]">
-                2 minutes ago
-              </div>
+          ) : activities.length === 0 ? (
+            <div className="text-center py-8 text-[var(--text-secondary)]">
+              No recent activity found
             </div>
-          </div>
-          <div className="flex items-center space-x-3 p-3 bg-[var(--background-secondary)] rounded-lg">
-            <div className="p-2 bg-blue-100 rounded-full">
-              <Users className="h-4 w-4 text-blue-600" />
-            </div>
-            <div>
-              <div className="text-sm font-medium text-[var(--text-primary)]">
-                New subscriber joined
+          ) : (
+            activities.map((activity) => (
+              <div key={activity.id} className="flex items-center space-x-3 p-3 bg-[var(--background-secondary)] rounded-lg">
+                {renderActivityIcon(activity.type)}
+                <div className="flex-1">
+                  <div className="text-sm font-medium text-[var(--text-primary)]">
+                    {activity.title}
+                  </div>
+                  {activity.details && (
+                    <div className="text-xs text-[var(--text-secondary)] mt-1">
+                      {activity.details}
+                    </div>
+                  )}
+                  <div className="text-xs text-[var(--text-secondary)] mt-1">
+                    {formatTimeAgo(new Date(activity.createdAt))}
+                  </div>
+                </div>
               </div>
-              <div className="text-xs text-[var(--text-secondary)]">
-                15 minutes ago
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center space-x-3 p-3 bg-[var(--background-secondary)] rounded-lg">
-            <div className="p-2 bg-purple-100 rounded-full">
-              <Mail className="h-4 w-4 text-purple-600" />
-            </div>
-            <div>
-              <div className="text-sm font-medium text-[var(--text-primary)]">
-                Newsletter sent to 150 subscribers
-              </div>
-              <div className="text-xs text-[var(--text-secondary)]">
-                1 hour ago
-              </div>
-            </div>
-          </div>
+            ))
+          )}
         </div>
       </div>
 
