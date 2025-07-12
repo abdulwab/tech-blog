@@ -19,9 +19,10 @@ import 'prismjs/components/prism-markdown'
 interface QuillContentProps {
   content: string
   className?: string
+  onContentProcessed?: (processedContent: string) => void
 }
 
-export default function QuillContent({ content, className = '' }: QuillContentProps) {
+export default function QuillContent({ content, className = '', onContentProcessed }: QuillContentProps) {
   const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -38,6 +39,11 @@ export default function QuillContent({ content, className = '' }: QuillContentPr
         contentRef.current.innerHTML = processedContent
       }
 
+      // Notify parent component about processed content
+      if (onContentProcessed) {
+        onContentProcessed(processedContent)
+      }
+
       // Apply theme-aware Tailwind classes to HTML elements
       const elements = contentRef.current.querySelectorAll('*')
       
@@ -49,60 +55,70 @@ export default function QuillContent({ content, className = '' }: QuillContentPr
             element.className = 'text-3xl font-bold text-[var(--text-primary)] mt-8 mb-4 border-b border-[var(--border-primary)] pb-2 scroll-mt-24'
             break
           case 'h2':
-            element.className = 'text-2xl font-bold text-[var(--text-primary)] mt-6 mb-3 scroll-mt-24'
+            element.className = 'text-2xl font-bold text-[var(--text-primary)] mt-7 mb-3 scroll-mt-24'
             break
           case 'h3':
-            element.className = 'text-xl font-bold text-[var(--text-primary)] mt-4 mb-2 scroll-mt-24'
+            element.className = 'text-xl font-semibold text-[var(--text-primary)] mt-6 mb-3 scroll-mt-24'
             break
           case 'h4':
-            element.className = 'text-lg font-semibold text-[var(--text-primary)] mt-3 mb-2 scroll-mt-24'
+            element.className = 'text-lg font-semibold text-[var(--text-primary)] mt-5 mb-2 scroll-mt-24'
             break
           case 'h5':
-            element.className = 'text-base font-semibold text-[var(--text-primary)] mt-2 mb-1 scroll-mt-24'
+            element.className = 'text-base font-semibold text-[var(--text-primary)] mt-4 mb-2 scroll-mt-24'
             break
           case 'h6':
-            element.className = 'text-sm font-semibold text-[var(--text-primary)] mt-2 mb-1 scroll-mt-24'
+            element.className = 'text-sm font-semibold text-[var(--text-primary)] mt-3 mb-2 scroll-mt-24'
             break
           case 'p':
-            element.className = 'text-[var(--text-primary)] leading-relaxed mb-4'
+            element.className = 'text-[var(--text-primary)] leading-normal mb-4 text-base'
             break
           case 'a':
             element.className = 'text-[var(--accent-web)] hover:text-[var(--accent-iot)] underline transition-colors'
             break
           case 'blockquote':
-            element.className = 'border-l-4 border-[var(--accent-web)] pl-4 italic bg-[var(--background-secondary)] p-4 rounded-r-lg my-4 text-[var(--text-secondary)]'
+            element.className = 'border-l-4 border-[var(--accent-web)] pl-6 py-2 italic bg-[var(--background-secondary)] rounded-r-lg my-6 text-[var(--text-secondary)] relative before:content-[""] before:absolute before:-left-2 before:top-0 before:text-4xl before:text-[var(--accent-web)] before:opacity-50'
             break
           case 'ul':
+            element.className = 'mb-4 pl-6 space-y-1 text-[var(--text-primary)]'
+            break
           case 'ol':
-            element.className = 'mb-4 pl-6 text-[var(--text-primary)]'
+            element.className = 'mb-4 pl-6 space-y-1 text-[var(--text-primary)]'
             break
           case 'li':
-            element.className = 'mb-1 text-[var(--text-primary)]'
+            element.className = 'text-[var(--text-primary)] leading-normal'
             break
           case 'code':
             if (element.parentElement?.tagName === 'PRE') {
-              element.className = 'bg-transparent p-0 text-inherit text-sm'
+              element.className = 'bg-transparent p-0 text-inherit text-sm leading-relaxed whitespace-pre-wrap break-words'
             } else {
-              element.className = 'bg-[var(--background-secondary)] border border-[var(--border-primary)] px-1 py-0.5 rounded text-sm font-mono text-[var(--accent-web)]'
+              element.className = 'bg-[var(--background-secondary)] border border-[var(--border-primary)] px-2 py-1 rounded text-sm font-mono text-[var(--accent-web)] whitespace-nowrap'
             }
             break
           case 'pre':
-            element.className = 'bg-[var(--background-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] p-4 rounded-lg overflow-x-auto my-4 relative'
+            element.className = 'bg-[var(--background-secondary)] border border-[var(--border-primary)] text-[var(--text-primary)] p-4 rounded-lg my-6 relative overflow-hidden'
+            // Add horizontal scrolling for mobile, but wrap on larger screens
+            const preElement = element as HTMLElement
+            preElement.style.cssText = `
+              overflow-x: auto;
+              white-space: pre-wrap;
+              word-wrap: break-word;
+              max-width: 100%;
+            `
             break
           case 'img':
-            element.className = 'max-w-full h-auto rounded-lg my-4 border border-[var(--border-primary)]'
+            element.className = 'max-w-full h-auto rounded-lg my-6 border border-[var(--border-primary)] shadow-sm'
             break
           case 'video':
-            element.className = 'max-w-full h-auto rounded-lg my-4'
+            element.className = 'max-w-full h-auto rounded-lg my-6'
             break
           case 'table':
-            element.className = 'min-w-full border-collapse border border-[var(--border-primary)] my-4'
+            element.className = 'min-w-full border-collapse border border-[var(--border-primary)] my-6 rounded-lg overflow-hidden'
             break
           case 'th':
-            element.className = 'bg-[var(--background-secondary)] border border-[var(--border-primary)] px-4 py-2 text-left font-semibold text-[var(--text-primary)]'
+            element.className = 'bg-[var(--background-secondary)] border border-[var(--border-primary)] px-4 py-3 text-left font-semibold text-[var(--text-primary)]'
             break
           case 'td':
-            element.className = 'border border-[var(--border-primary)] px-4 py-2 text-[var(--text-primary)]'
+            element.className = 'border border-[var(--border-primary)] px-4 py-3 text-[var(--text-primary)]'
             break
           case 'strong':
           case 'b':
@@ -150,8 +166,29 @@ export default function QuillContent({ content, className = '' }: QuillContentPr
 
       // Highlight all code blocks
       Prism.highlightAllUnder(contentRef.current)
+
+      // Add copy button to code blocks
+      const preElements = contentRef.current.querySelectorAll('pre')
+      preElements.forEach((pre) => {
+        if (!pre.querySelector('.copy-button')) {
+          const copyButton = document.createElement('button')
+          copyButton.className = 'copy-button absolute top-2 right-2 bg-[var(--background)] border border-[var(--border-primary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-1 rounded text-xs transition-colors'
+          copyButton.textContent = 'Copy'
+          copyButton.addEventListener('click', () => {
+            const code = pre.querySelector('code')
+            if (code) {
+              navigator.clipboard.writeText(code.textContent || '')
+              copyButton.textContent = 'Copied!'
+              setTimeout(() => {
+                copyButton.textContent = 'Copy'
+              }, 2000)
+            }
+          })
+          pre.appendChild(copyButton)
+        }
+      })
     }
-  }, [content])
+  }, [content, onContentProcessed])
 
   // Check if content contains escaped HTML and fix it
   const processedContent = isEscapedHtml(content) ? unescapeHtml(content) : content

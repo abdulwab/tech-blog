@@ -21,16 +21,15 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
   useEffect(() => {
     // Extract headings from HTML content
     const parser = new DOMParser()
-    const doc = parser.parseFromString(content, 'text/html')
+    // Handle escaped HTML content
+    const htmlContent = content.includes('&lt;') ? content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&') : content
+    const doc = parser.parseFromString(htmlContent, 'text/html')
     const headings = doc.querySelectorAll('h1, h2, h3, h4, h5, h6')
     
     const items: TOCItem[] = Array.from(headings).map((heading, index) => {
       const level = parseInt(heading.tagName.charAt(1))
       const text = heading.textContent || ''
-      const id = `heading-${index}-${text.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
-      
-      // Add id to the heading if it doesn't have one
-      heading.id = id
+      const id = `heading-${index}-${text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`
       
       return { id, text, level }
     })
@@ -40,14 +39,17 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 
   useEffect(() => {
     // Update heading IDs in the actual DOM
-    tocItems.forEach((item) => {
+    tocItems.forEach((item, index) => {
       const element = document.getElementById(item.id)
       if (!element) {
         // Find the heading by text content and add the ID
         const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-        Array.from(headings).forEach((heading) => {
+                 Array.from(headings).forEach((heading, headingIndex) => {
           if (heading.textContent === item.text && !heading.id) {
             heading.id = item.id
+            // Also add the scroll margin top for better positioning
+            const htmlHeading = heading as HTMLElement
+            htmlHeading.style.scrollMarginTop = '100px'
           }
         })
       }

@@ -1,9 +1,8 @@
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
-import BlogPost from '@/components/BlogPost'
+import BlogPostContent from '@/components/BlogPostContent'
 import AuthorBio from '@/components/AuthorBio'
-import TableOfContents from '@/components/TableOfContents'
 import SubscriptionForm from '@/components/SubscriptionForm'
 import Link from 'next/link'
 import { ArrowLeft, Share2, Twitter, Linkedin, Facebook } from 'lucide-react'
@@ -192,54 +191,42 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Main Content with TOC */}
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-            {/* Blog Content */}
-            <div className="lg:col-span-8 xl:col-span-9">
-              <BlogPost post={post} />
+          <BlogPostContent post={post} />
 
-              {/* Author Bio */}
-              <div className="max-w-4xl">
-                <AuthorBio author={authorInfo} />
-              </div>
+          {/* Author Bio */}
+          <div className="max-w-4xl mx-auto lg:max-w-none lg:pl-0">
+            <AuthorBio author={authorInfo} />
+          </div>
 
-              {/* Share Section */}
-              <div className="max-w-4xl py-8 border-t border-[var(--border-primary)]">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">Share this article</h3>
-                  <div className="flex space-x-4">
-                    <a
-                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
-                    >
-                      <Twitter className="h-5 w-5" />
-                    </a>
-                    <a
-                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-iot)] transition-colors"
-                    >
-                      <Linkedin className="h-5 w-5" />
-                    </a>
-                    <a
-                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-ai)] transition-colors"
-                    >
-                      <Facebook className="h-5 w-5" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Table of Contents Sidebar */}
-            <div className="hidden lg:block lg:col-span-4 xl:col-span-3">
-              <div className="sticky top-24">
-                <TableOfContents content={post.content} />
+          {/* Share Section */}
+          <div className="max-w-4xl mx-auto lg:max-w-none lg:pl-0 py-8 border-t border-[var(--border-primary)]">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)]">Share this article</h3>
+              <div className="flex space-x-4">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
+                >
+                  <Twitter className="h-5 w-5" />
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-iot)] transition-colors"
+                >
+                  <Linkedin className="h-5 w-5" />
+                </a>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-ai)] transition-colors"
+                >
+                  <Facebook className="h-5 w-5" />
+                </a>
               </div>
             </div>
           </div>

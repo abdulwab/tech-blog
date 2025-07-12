@@ -15,9 +15,10 @@ interface BlogPostProps {
     createdAt: Date
     tags: string[]
   }
+  onContentProcessed?: (processedContent: string) => void
 }
 
-export default function BlogPost({ post }: BlogPostProps) {
+export default function BlogPost({ post, onContentProcessed }: BlogPostProps) {
   const readingTime = calculateReadingTime(post.content)
   
   return (
@@ -79,7 +80,7 @@ export default function BlogPost({ post }: BlogPostProps) {
 
       {/* Content - Now rendering HTML from Quill */}
       <div className="prose prose-lg max-w-none">
-        <QuillContent content={post.content} />
+        <QuillContent content={post.content} onContentProcessed={onContentProcessed} />
       </div>
     </article>
   )
