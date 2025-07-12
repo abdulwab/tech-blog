@@ -258,9 +258,30 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Post ID required' }, { status: 400 })
     }
 
+    // Get post details before deletion for logging
+    const postToDelete = await prisma.post.findUnique({
+      where: { id },
+      select: { title: true, slug: true, category: true }
+    })
+
     await prisma.post.delete({
       where: { id }
     })
+
+    // Log activity
+    if (postToDelete) {
+      await logActivity({
+        type: 'post_deleted',
+        title: `Deleted post: "${postToDelete.title}"`,
+        details: `Post permanently removed from the system`,
+        metadata: {
+          postId: id,
+          postSlug: postToDelete.slug,
+          category: postToDelete.category
+        },
+        createdBy: userId
+      })
+    }
 
     return NextResponse.json({ message: 'Post deleted successfully' })
   } catch (error) {
