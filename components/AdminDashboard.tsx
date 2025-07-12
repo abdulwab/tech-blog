@@ -23,10 +23,11 @@ import {
 import PostsManager from './admin/PostsManager'
 import CategoriesManager from './admin/CategoriesManager'
 import NotificationsManager from './admin/NotificationsManager'
+import SubscribersManager from './admin/SubscribersManager'
 import AdminStats from './admin/AdminStats'
 import Tooltip from './Tooltip'
 
-type Tab = 'overview' | 'posts' | 'categories' | 'notifications' | 'settings'
+type Tab = 'overview' | 'posts' | 'categories' | 'notifications' | 'subscribers' | 'settings'
 
 interface AdminDashboardProps {
   initialTab?: Tab
@@ -65,6 +66,7 @@ export default function AdminDashboard({ initialTab = 'overview' }: AdminDashboa
     { id: 'posts', label: 'Posts', icon: FileText },
     { id: 'categories', label: 'Categories', icon: Tag },
     { id: 'notifications', label: 'Notifications', icon: Mail },
+    { id: 'subscribers', label: 'Subscribers', icon: Users },
     { id: 'settings', label: 'Settings', icon: Settings }
   ]
 
@@ -78,6 +80,8 @@ export default function AdminDashboard({ initialTab = 'overview' }: AdminDashboa
         return <CategoriesManager />
       case 'notifications':
         return <NotificationsManager />
+      case 'subscribers':
+        return <SubscribersManager />
       case 'settings':
         return <AdminSettings />
       default:
@@ -113,6 +117,8 @@ export default function AdminDashboard({ initialTab = 'overview' }: AdminDashboa
                     return 'Create and manage blog categories'
                   case 'notifications':
                     return 'Send email notifications to subscribers'
+                  case 'subscribers':
+                    return 'Manage email subscribers and mailing list'
                   case 'settings':
                     return 'Configure admin settings and preferences'
                   default:

@@ -16,7 +16,7 @@ import {
 } from 'lucide-react'
 import Tooltip from '../Tooltip'
 
-type Tab = 'overview' | 'posts' | 'categories' | 'notifications' | 'settings'
+type Tab = 'overview' | 'posts' | 'categories' | 'notifications' | 'subscribers' | 'settings'
 
 interface AdminStatsProps {
   stats: {
@@ -182,9 +182,9 @@ export default function AdminStats({ stats, onRefresh, onNavigateToTab }: AdminS
               <span>Send Newsletter</span>
             </button>
           </Tooltip>
-          <Tooltip content="Navigate to settings section to manage subscribers" position="top">
+          <Tooltip content="Navigate to subscribers section to manage email list" position="top">
             <button 
-              onClick={() => onNavigateToTab('settings')}
+              onClick={() => onNavigateToTab('subscribers')}
               className="bg-[var(--accent-mobile)] text-white p-4 rounded-lg hover:bg-[var(--accent-mobile-dark)] transition-colors flex items-center space-x-2"
             >
               <Users className="h-5 w-5" />
