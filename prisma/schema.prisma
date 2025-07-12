@@ -35,4 +35,48 @@ model Subscriber {
   isActive     Boolean  @default(true)
 
   @@map("subscribers")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String   @default("#60a5fa") // Default to web color
+  icon        String?  // Icon name or emoji
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("categories")
+}
+
+model EmailNotification {
+  id          String   @id @default(cuid())
+  subject     String
+  content     String
+  recipientType String // 'all', 'active', 'specific'
+  recipientList String[] @default([]) // Specific emails if recipientType is 'specific'
+  sentAt      DateTime?
+  sentCount   Int      @default(0)
+  failedCount Int      @default(0)
+  status      String   @default("draft") // 'draft', 'scheduled', 'sent', 'failed'
+  scheduledAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String   // Admin user ID
+
+  @@map("email_notifications")
+}
+
+model AdminSettings {
+  id                    String   @id @default(cuid())
+  emailNotifications    Boolean  @default(true)
+  autoNotifyNewPost     Boolean  @default(true)
+  autoNotifyNewSubscriber Boolean @default(true)
+  notificationFromEmail String   @default("noreply@techblog.com")
+  notificationFromName  String   @default("TechBlog")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("admin_settings")
 } 
