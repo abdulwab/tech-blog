@@ -167,6 +167,11 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Slug already exists' }, { status: 400 })
     }
 
+    // Get the current post to check for status changes
+    const currentPost = await prisma.post.findUnique({
+      where: { id }
+    })
+
     const post = await prisma.post.update({
       where: { id },
       data: {
@@ -182,6 +187,54 @@ export async function PUT(request: NextRequest) {
         author
       }
     })
+
+    // Log activity based on changes
+    if (currentPost) {
+      if (!currentPost.isPublished && isPublished) {
+        // Post was published
+        await logActivity({
+          type: 'post_published',
+          title: `Published post: "${title}"`,
+          details: `Post moved from draft to published status`,
+          metadata: {
+            postId: post.id,
+            postSlug: post.slug,
+            category: post.category,
+            previousStatus: 'draft',
+            newStatus: 'published'
+          },
+          createdBy: userId
+        })
+      } else if (currentPost.isFeatured !== isFeatured) {
+        // Featured status changed
+        await logActivity({
+          type: isFeatured ? 'post_featured' : 'post_unfeatured',
+          title: `${isFeatured ? 'Featured' : 'Unfeatured'} post: "${title}"`,
+          details: `Post ${isFeatured ? 'added to' : 'removed from'} featured section`,
+          metadata: {
+            postId: post.id,
+            postSlug: post.slug,
+            category: post.category,
+            featured: isFeatured
+          },
+          createdBy: userId
+        })
+      } else {
+        // Regular update
+        await logActivity({
+          type: 'post_updated',
+          title: `Updated post: "${title}"`,
+          details: `Post content and metadata updated`,
+          metadata: {
+            postId: post.id,
+            postSlug: post.slug,
+            category: post.category,
+            tags: post.tags
+          },
+          createdBy: userId
+        })
+      }
+    }
 
     return NextResponse.json(post)
   } catch (error) {
