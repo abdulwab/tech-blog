@@ -147,7 +147,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       name: 'TechBlog',
       logo: {
         '@type': 'ImageObject',
-        url: `${process.env.NEXT_PUBLIC_APP_URL}/logo.png`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/default-avatar.svg`,
       },
     },
     datePublished: post.createdAt.toISOString(),
