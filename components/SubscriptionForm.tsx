@@ -44,13 +44,13 @@ export default function SubscriptionForm() {
   }
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-white">
+    <div className="bg-gradient-to-r from-[var(--accent-web)] to-[var(--accent-ai)] rounded-lg p-8 text-white">
       <div className="max-w-md mx-auto text-center">
         <Mail className="h-12 w-12 mx-auto mb-4" />
         <h3 className="text-2xl font-bold mb-2">
           Stay Updated
         </h3>
-        <p className="text-blue-100 mb-6">
+        <p className="text-white/90 mb-6">
           Get the latest tech insights and tutorials delivered to your inbox.
         </p>
 
@@ -63,16 +63,16 @@ export default function SubscriptionForm() {
               placeholder="Enter your email"
               required
               disabled={status === 'loading'}
-              className="flex-1 px-4 py-2 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50"
+              className="flex-1 px-4 py-2 text-[var(--text-primary)] bg-[var(--card-bg)] border border-[var(--border-primary)] rounded-lg focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50"
             />
             <button
               type="submit"
               disabled={status === 'loading' || status === 'success'}
-              className="px-6 py-2 bg-white text-blue-600 font-medium rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2 bg-white text-[var(--accent-web)] font-medium rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {status === 'loading' ? (
                 <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[var(--accent-web)] mr-2"></div>
                   Subscribing...
                 </div>
               ) : status === 'success' ? (
@@ -89,8 +89,8 @@ export default function SubscriptionForm() {
           {message && (
             <div className={`flex items-center space-x-2 p-3 rounded-lg ${
               status === 'success' 
-                ? 'bg-green-100 text-green-800 border border-green-200' 
-                : 'bg-red-100 text-red-800 border border-red-200'
+                ? 'bg-[var(--success)]/10 text-[var(--success)] border border-[var(--success)]/20' 
+                : 'bg-[var(--error)]/10 text-[var(--error)] border border-[var(--error)]/20'
             }`}>
               {status === 'success' ? (
                 <Check className="h-4 w-4" />
