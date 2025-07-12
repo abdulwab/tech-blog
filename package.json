@@ -10,6 +10,7 @@
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
+    "seed:categories": "node scripts/seed-categories.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {

@@ -66,6 +66,23 @@ export default function PostsManager() {
   const [selectedPosts, setSelectedPosts] = useState<string[]>([])
   const [showForm, setShowForm] = useState(false)
   const [editingPost, setEditingPost] = useState<Post | null>(null)
+  const [categories, setCategories] = useState<Array<{id: string, name: string, slug: string}>>([])
+
+  // Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/admin/categories')
+        if (response.ok) {
+          const data = await response.json()
+          setCategories(data)
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error)
+      }
+    }
+    fetchCategories()
+  }, [])
 
   // Fetch posts
   useEffect(() => {
@@ -286,11 +303,11 @@ export default function PostsManager() {
               className="px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
             >
               <option value="all">All Categories</option>
-              <option value="Web Development">Web Development</option>
-              <option value="AI">AI</option>
-              <option value="IoT">IoT</option>
-              <option value="Mobile">Mobile</option>
-              <option value="Blockchain">Blockchain</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
             </select>
           </Tooltip>
 
@@ -437,9 +454,16 @@ export default function PostsManager() {
                       {getStatusBadge(post)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-[var(--text-primary)]">
-                        {post.category}
-                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {post.category.split(',').map((cat, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[var(--accent-web)] text-white"
+                          >
+                            {cat.trim()}
+                          </span>
+                        ))}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="text-sm text-[var(--text-primary)]">

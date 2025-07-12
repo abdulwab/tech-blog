@@ -38,7 +38,34 @@ export default function PostEditor({ initialData, onSave, onCancel }: PostEditor
   const [isLoading, setIsLoading] = useState(false)
   const [preview, setPreview] = useState(false)
   const [loadingContent, setLoadingContent] = useState(false)
+  const [categories, setCategories] = useState<Array<{id: string, name: string, slug: string, color: string}>>([])
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const isEditing = Boolean(initialData?.id)
+
+  // Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/admin/categories')
+        if (response.ok) {
+          const data = await response.json()
+          setCategories(data)
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error)
+      }
+    }
+    fetchCategories()
+  }, [])
+
+  // Initialize selected categories
+  useEffect(() => {
+    if (initialData?.category) {
+      // Handle legacy single category or comma-separated categories
+      const categoryList = initialData.category.split(',').map(cat => cat.trim()).filter(Boolean)
+      setSelectedCategories(categoryList)
+    }
+  }, [initialData?.category])
 
   // Fetch full post content when editing
   useEffect(() => {
@@ -61,17 +88,24 @@ export default function PostEditor({ initialData, onSave, onCancel }: PostEditor
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (selectedCategories.length === 0) {
+      alert('Please select at least one category.')
+      return
+    }
+    
     setIsLoading(true)
 
     try {
       const slug = initialData?.slug || createSlug(formData.title)
       const tagsArray = formData.tags.split(',').map(tag => tag.trim()).filter(Boolean)
+      const categoryString = selectedCategories.join(', ')
 
       const url = isEditing ? '/api/admin/posts' : '/api/posts'
       const method = isEditing ? 'PUT' : 'POST'
       const body = isEditing 
-        ? { ...formData, id: initialData?.id, slug, tags: tagsArray }
-        : { ...formData, slug, tags: tagsArray }
+        ? { ...formData, id: initialData?.id, slug, tags: tagsArray, category: categoryString }
+        : { ...formData, slug, tags: tagsArray, category: categoryString }
 
       const response = await fetch(url, {
         method,
@@ -190,40 +224,62 @@ export default function PostEditor({ initialData, onSave, onCancel }: PostEditor
             </div>
 
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                Category *
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                Categories *
               </label>
-              <select
-                id="category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 bg-[var(--card-bg)] border border-[var(--border-primary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] text-[var(--text-primary)]"
-              >
-                <option value="">Select category</option>
-                <option value="web-development">Web Development</option>
-                <option value="javascript">JavaScript</option>
-                <option value="react">React</option>
-                <option value="nextjs">Next.js</option>
-                <option value="nodejs">Node.js</option>
-                <option value="artificial-intelligence">Artificial Intelligence</option>
-                <option value="machine-learning">Machine Learning</option>
-                <option value="large-language-models">Large Language Models</option>
-                <option value="iot">Internet of Things (IoT)</option>
-                <option value="robotics">Robotics</option>
-                <option value="data-science">Data Science</option>
-                <option value="blockchain">Blockchain</option>
-                <option value="cybersecurity">Cybersecurity</option>
-                <option value="cloud-computing">Cloud Computing</option>
-                <option value="devops">DevOps</option>
-                <option value="mobile-development">Mobile Development</option>
-                <option value="python">Python</option>
-                <option value="tutorials">Tutorials</option>
-                <option value="tips">Tips & Tricks</option>
-                <option value="industry-trends">Industry Trends</option>
-                <option value="tech-news">Tech News</option>
-              </select>
+              {categories.length === 0 ? (
+                <div className="text-sm text-[var(--text-secondary)] p-4 border border-[var(--border-primary)] rounded-md">
+                  No categories available. Please create categories in the admin panel first.
+                </div>
+              ) : (
+                <div className="border border-[var(--border-primary)] rounded-md p-3 max-h-48 overflow-y-auto">
+                  {categories.map((category) => (
+                    <label key={category.id} className="flex items-center space-x-2 py-2 hover:bg-[var(--hover-bg)] rounded px-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(category.name)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedCategories([...selectedCategories, category.name])
+                          } else {
+                            setSelectedCategories(selectedCategories.filter(cat => cat !== category.name))
+                          }
+                        }}
+                        className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)] border-[var(--border-primary)] rounded"
+                      />
+                      <div className="flex items-center space-x-2">
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: category.color }}
+                        />
+                        <span className="text-[var(--text-primary)]">{category.name}</span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              )}
+              {selectedCategories.length > 0 && (
+                <div className="mt-2">
+                  <span className="text-sm text-[var(--text-secondary)]">Selected: </span>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {selectedCategories.map((category) => (
+                      <span
+                        key={category}
+                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[var(--accent-web)] text-white"
+                      >
+                        {category}
+                        <button
+                          type="button"
+                          onClick={() => setSelectedCategories(selectedCategories.filter(cat => cat !== category))}
+                          className="ml-1 text-white hover:text-gray-200"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
