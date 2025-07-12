@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@clerk/nextjs/server'
+import { logActivity } from '@/lib/activity'
 
 // GET all subscribers for admin
 export async function GET(request: NextRequest) {
@@ -95,6 +96,20 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    // Log activity
+    await logActivity({
+      type: 'subscriber_added',
+      title: `New subscriber added: ${email}`,
+      details: `Subscriber ${isActive ? 'activated' : 'added as inactive'} by admin`,
+      metadata: {
+        subscriberId: subscriber.id,
+        email: subscriber.email,
+        isActive: subscriber.isActive,
+        source: 'admin_panel'
+      },
+      createdBy: userId
+    })
+
     return NextResponse.json(subscriber, { status: 201 })
   } catch (error) {
     console.error('Error creating subscriber:', error)
@@ -133,6 +148,11 @@ export async function PUT(request: NextRequest) {
       }
     }
 
+    // Get current subscriber data for comparison
+    const currentSubscriber = await prisma.subscriber.findUnique({
+      where: { id }
+    })
+
     const updateData: any = {}
     if (email !== undefined) updateData.email = email
     if (isActive !== undefined) updateData.isActive = isActive
@@ -141,6 +161,38 @@ export async function PUT(request: NextRequest) {
       where: { id },
       data: updateData
     })
+
+    // Log activity based on changes
+    if (currentSubscriber) {
+      if (currentSubscriber.isActive !== isActive && isActive !== undefined) {
+        // Status changed
+        await logActivity({
+          type: isActive ? 'subscriber_activated' : 'subscriber_deactivated',
+          title: `Subscriber ${isActive ? 'activated' : 'deactivated'}: ${subscriber.email}`,
+          details: `Subscriber status changed from ${currentSubscriber.isActive ? 'active' : 'inactive'} to ${isActive ? 'active' : 'inactive'}`,
+          metadata: {
+            subscriberId: subscriber.id,
+            email: subscriber.email,
+            previousStatus: currentSubscriber.isActive,
+            newStatus: isActive
+          },
+          createdBy: userId
+        })
+      } else if (currentSubscriber.email !== email && email !== undefined) {
+        // Email changed
+        await logActivity({
+          type: 'subscriber_updated',
+          title: `Subscriber email updated: ${currentSubscriber.email} → ${email}`,
+          details: `Subscriber email address changed`,
+          metadata: {
+            subscriberId: subscriber.id,
+            previousEmail: currentSubscriber.email,
+            newEmail: email
+          },
+          createdBy: userId
+        })
+      }
+    }
 
     return NextResponse.json(subscriber)
   } catch (error) {
