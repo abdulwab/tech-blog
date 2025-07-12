@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
-import { formatDate, truncateText } from '@/lib/utils'
-import { Calendar, User, Tag } from 'lucide-react'
+import { formatDate, truncateText, formatCategory, calculateReadingTime, formatReadingTime } from '@/lib/utils'
+import { Calendar, User, Tag, Clock } from 'lucide-react'
 import CategorySelect from "@/components/CategorySelect";
 
 interface SearchParams {
@@ -48,15 +48,15 @@ export default async function BlogPage({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[var(--background)]">
       {/* Header */}
-      <div className="bg-white shadow-sm">
+      <div className="bg-[var(--card-bg)] border-b border-[var(--card-border)] shadow-sm">
         <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
+            <h1 className="text-4xl font-bold text-[var(--text-primary)] sm:text-5xl">
               Blog Posts
             </h1>
-            <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="mt-4 text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
               Explore our collection of articles covering the latest in technology, 
               web development, and programming tutorials.
             </p>
@@ -70,8 +70,8 @@ export default async function BlogPage({
           <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-8 space-y-8">
               {/* Categories */}
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg shadow p-6">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
                   Categories
                 </h3>
                 <ul className="space-y-2">
@@ -80,12 +80,12 @@ export default async function BlogPage({
                       href="/blog"
                       className={`flex items-center justify-between py-2 px-3 rounded-md transition-colors ${
                         !category
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'text-gray-600 hover:bg-gray-100'
+                          ? 'bg-[var(--accent-web)]/10 text-[var(--accent-web)]'
+                          : 'text-[var(--text-secondary)] hover:bg-[var(--hover-bg)]'
                       }`}
                     >
                       <span>All Posts</span>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-[var(--text-secondary)]">
                         {posts.length}
                       </span>
                     </Link>
@@ -96,14 +96,14 @@ export default async function BlogPage({
                         href={`/blog?category=${cat.category}`}
                         className={`flex items-center justify-between py-2 px-3 rounded-md transition-colors ${
                           category === cat.category
-                            ? 'bg-blue-100 text-blue-700'
-                            : 'text-gray-600 hover:bg-gray-100'
+                            ? 'bg-[var(--accent-web)]/10 text-[var(--accent-web)]'
+                            : 'text-[var(--text-secondary)] hover:bg-[var(--hover-bg)]'
                         }`}
                       >
                         <span className="capitalize">
-                          {cat.category.replace('-', ' ')}
+                          {formatCategory(cat.category)}
                         </span>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-[var(--text-secondary)]">
                           {cat._count.category}
                         </span>
                       </Link>
@@ -118,8 +118,8 @@ export default async function BlogPage({
           <main className="lg:col-span-9">
             {/* Mobile Category Filter */}
             <div className="lg:hidden mb-6">
-  <CategorySelect categories={categories} currentCategory={category} />
-</div>
+              <CategorySelect categories={categories} currentCategory={category} />
+            </div>
 
             {/* Posts Grid */}
             {posts.length > 0 ? (
@@ -127,7 +127,7 @@ export default async function BlogPage({
                 {posts.map((post) => (
                   <article
                     key={post.id}
-                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                    className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
                   >
                     <Link href={`/blog/${post.slug}`}>
                       <Image
@@ -142,11 +142,11 @@ export default async function BlogPage({
                     <div className="p-6">
                       {/* Category and Tags */}
                       <div className="flex items-center gap-2 mb-3">
-                        <span className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">
-                          {post.category}
+                        <span className="inline-block bg-[var(--accent-web)]/10 text-[var(--accent-web)] text-xs font-medium px-2 py-1 rounded">
+                          {formatCategory(post.category)}
                         </span>
                         {post.isFeatured && (
-                          <span className="inline-block bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-1 rounded">
+                          <span className="inline-block bg-[var(--accent-ai)]/10 text-[var(--accent-ai)] text-xs font-medium px-2 py-1 rounded">
                             Featured
                           </span>
                         )}
@@ -154,13 +154,13 @@ export default async function BlogPage({
 
                       {/* Title */}
                       <Link href={`/blog/${post.slug}`}>
-                        <h2 className="text-xl font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors line-clamp-2">
+                        <h2 className="text-xl font-bold text-[var(--text-primary)] mb-3 hover:text-[var(--accent-web)] transition-colors line-clamp-2">
                           {post.title}
                         </h2>
                       </Link>
 
                       {/* Description */}
-                      <p className="text-gray-600 mb-4 line-clamp-3">
+                      <p className="text-[var(--text-secondary)] mb-4 line-clamp-3">
                         {truncateText(post.description, 150)}
                       </p>
 
@@ -170,14 +170,14 @@ export default async function BlogPage({
                           {post.tags.slice(0, 3).map((tag: string) => (
                             <span
                               key={tag}
-                              className="inline-flex items-center text-xs text-gray-500"
+                              className="inline-flex items-center text-xs text-[var(--text-secondary)]"
                             >
                               <Tag className="h-3 w-3 mr-1" />
                               {tag}
                             </span>
                           ))}
                           {post.tags.length > 3 && (
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-[var(--text-secondary)]">
                               +{post.tags.length - 3} more
                             </span>
                           )}
@@ -185,7 +185,7 @@ export default async function BlogPage({
                       )}
 
                       {/* Meta */}
-                      <div className="flex items-center text-sm text-gray-500 space-x-4">
+                      <div className="flex items-center text-sm text-[var(--text-secondary)] space-x-4">
                         <div className="flex items-center">
                           <User className="h-4 w-4 mr-1" />
                           {post.author}
@@ -194,6 +194,10 @@ export default async function BlogPage({
                           <Calendar className="h-4 w-4 mr-1" />
                           {formatDate(post.createdAt)}
                         </div>
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-1" />
+                          {formatReadingTime(calculateReadingTime(post.content))}
+                        </div>
                       </div>
                     </div>
                   </article>
@@ -201,10 +205,10 @@ export default async function BlogPage({
               </div>
             ) : (
               <div className="text-center py-12">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
                   No posts found
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-[var(--text-secondary)]">
                   {category 
                     ? `No posts found in the "${category}" category.`
                     : 'No posts have been published yet.'
