@@ -1,24 +1,75 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'images.unsplash.com',
-      'res.cloudinary.com',
-      'images.ctfassets.net', // Contentful
-      'cdn.sanity.io', // Sanity
-      'picsum.photos', // Lorem Picsum
-      'via.placeholder.com', // Placeholder images
-      'placehold.co', // Placeholder images
-      'source.unsplash.com', // Unsplash source
-      'images.pexels.com', // Pexels
-      'cdn.pixabay.com', // Pixabay
-      'raw.githubusercontent.com', // GitHub raw content
-      'github.com', // GitHub assets
-      'avatars.githubusercontent.com', // GitHub avatars
-      'i.imgur.com', // Imgur
-      'media.giphy.com', // Giphy
-      'firebasestorage.googleapis.com', // Firebase Storage
-      'storage.googleapis.com', // Google Cloud Storage
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.ctfassets.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'source.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.pixabay.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'github.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.imgur.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.giphy.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      },
     ],
   },
   experimental: {

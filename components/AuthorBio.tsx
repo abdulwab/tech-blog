@@ -25,7 +25,7 @@ export default function AuthorBio({ author }: AuthorBioProps) {
         {/* Avatar */}
         <div className="flex-shrink-0">
           <Image
-            src={author.avatar || '/default-avatar.png'}
+            src={author.avatar || '/default-avatar.svg'}
             alt={author.name}
             width={80}
             height={80}

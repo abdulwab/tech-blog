@@ -21,7 +21,7 @@ export default function BlogPost({ post }: BlogPostProps) {
   const readingTime = calculateReadingTime(post.content)
   
   return (
-    <article className="max-w-4xl mx-auto px-4 py-8 bg-[var(--background)] text-[var(--foreground)]">
+    <article className="w-full py-8 bg-[var(--background)] text-[var(--foreground)]">
       {/* Header */}
       <header className="mb-8">
         <div className="mb-4">
@@ -78,7 +78,9 @@ export default function BlogPost({ post }: BlogPostProps) {
       </div>
 
       {/* Content - Now rendering HTML from Quill */}
-      <QuillContent content={post.content} />
+      <div className="prose prose-lg max-w-none">
+        <QuillContent content={post.content} />
+      </div>
     </article>
   )
 }

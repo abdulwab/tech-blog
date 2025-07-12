@@ -49,22 +49,7 @@ export default async function BlogPage({
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      {/* Header */}
-      <div className="bg-[var(--card-bg)] border-b border-[var(--card-border)] shadow-sm">
-        <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-[var(--text-primary)] sm:text-5xl">
-              Blog Posts
-            </h1>
-            <p className="mt-4 text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
-              Explore our collection of articles covering the latest in technology, 
-              web development, and programming tutorials.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
           {/* Sidebar */}
           <aside className="hidden lg:block lg:col-span-3">
@@ -123,25 +108,25 @@ export default async function BlogPage({
 
             {/* Posts Grid */}
             {posts.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {posts.map((post) => (
                   <article
                     key={post.id}
-                    className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                    className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
                   >
                     <Link href={`/blog/${post.slug}`}>
                       <Image
                         src={post.coverImage}
                         alt={post.title}
                         width={400}
-                        height={200}
-                        className="w-full h-48 object-cover hover:opacity-90 transition-opacity"
+                        height={160}
+                        className="w-full h-36 object-cover hover:opacity-90 transition-opacity"
                       />
                     </Link>
                     
-                    <div className="p-6">
+                    <div className="p-4">
                       {/* Category and Tags */}
-                      <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-2 mb-2">
                         <span className="inline-block bg-[var(--accent-web)]/10 text-[var(--accent-web)] text-xs font-medium px-2 py-1 rounded">
                           {formatCategory(post.category)}
                         </span>
@@ -154,20 +139,20 @@ export default async function BlogPage({
 
                       {/* Title */}
                       <Link href={`/blog/${post.slug}`}>
-                        <h2 className="text-xl font-bold text-[var(--text-primary)] mb-3 hover:text-[var(--accent-web)] transition-colors line-clamp-2">
+                        <h2 className="text-lg font-bold text-[var(--text-primary)] mb-2 hover:text-[var(--accent-web)] transition-colors line-clamp-2">
                           {post.title}
                         </h2>
                       </Link>
 
                       {/* Description */}
-                      <p className="text-[var(--text-secondary)] mb-4 line-clamp-3">
-                        {truncateText(post.description, 150)}
+                      <p className="text-[var(--text-secondary)] mb-3 text-sm line-clamp-2">
+                        {truncateText(post.description, 120)}
                       </p>
 
                       {/* Tags */}
                       {post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-4">
-                          {post.tags.slice(0, 3).map((tag: string) => (
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {post.tags.slice(0, 2).map((tag: string) => (
                             <span
                               key={tag}
                               className="inline-flex items-center text-xs text-[var(--text-secondary)]"
@@ -176,28 +161,21 @@ export default async function BlogPage({
                               {tag}
                             </span>
                           ))}
-                          {post.tags.length > 3 && (
+                          {post.tags.length > 2 && (
                             <span className="text-xs text-[var(--text-secondary)]">
-                              +{post.tags.length - 3} more
+                              +{post.tags.length - 2} more
                             </span>
                           )}
                         </div>
                       )}
 
                       {/* Meta */}
-                      <div className="flex items-center text-sm text-[var(--text-secondary)] space-x-4">
-                        <div className="flex items-center">
-                          <User className="h-4 w-4 mr-1" />
-                          {post.author}
-                        </div>
-                        <div className="flex items-center">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          {formatDate(post.createdAt)}
-                        </div>
-                        <div className="flex items-center">
-                          <Clock className="h-4 w-4 mr-1" />
-                          {formatReadingTime(calculateReadingTime(post.content))}
-                        </div>
+                      <div className="flex items-center text-xs text-[var(--text-secondary)] space-x-3">
+                        <span>{post.author}</span>
+                        <span>•</span>
+                        <span>{formatDate(post.createdAt)}</span>
+                        <span>•</span>
+                        <span>{formatReadingTime(calculateReadingTime(post.content))}</span>
                       </div>
                     </div>
                   </article>

@@ -33,22 +33,22 @@ export default function QuillContent({ content, className = '' }: QuillContentPr
         
         switch (tagName) {
           case 'h1':
-            element.className = 'text-3xl font-bold text-[var(--text-primary)] mt-8 mb-4 border-b border-[var(--border-primary)] pb-2'
+            element.className = 'text-3xl font-bold text-[var(--text-primary)] mt-8 mb-4 border-b border-[var(--border-primary)] pb-2 scroll-mt-24'
             break
           case 'h2':
-            element.className = 'text-2xl font-bold text-[var(--text-primary)] mt-6 mb-3'
+            element.className = 'text-2xl font-bold text-[var(--text-primary)] mt-6 mb-3 scroll-mt-24'
             break
           case 'h3':
-            element.className = 'text-xl font-bold text-[var(--text-primary)] mt-4 mb-2'
+            element.className = 'text-xl font-bold text-[var(--text-primary)] mt-4 mb-2 scroll-mt-24'
             break
           case 'h4':
-            element.className = 'text-lg font-semibold text-[var(--text-primary)] mt-3 mb-2'
+            element.className = 'text-lg font-semibold text-[var(--text-primary)] mt-3 mb-2 scroll-mt-24'
             break
           case 'h5':
-            element.className = 'text-base font-semibold text-[var(--text-primary)] mt-2 mb-1'
+            element.className = 'text-base font-semibold text-[var(--text-primary)] mt-2 mb-1 scroll-mt-24'
             break
           case 'h6':
-            element.className = 'text-sm font-semibold text-[var(--text-primary)] mt-2 mb-1'
+            element.className = 'text-sm font-semibold text-[var(--text-primary)] mt-2 mb-1 scroll-mt-24'
             break
           case 'p':
             element.className = 'text-[var(--text-primary)] leading-relaxed mb-4'

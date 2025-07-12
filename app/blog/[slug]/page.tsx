@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import BlogPost from '@/components/BlogPost'
 import AuthorBio from '@/components/AuthorBio'
+import TableOfContents from '@/components/TableOfContents'
 import SubscriptionForm from '@/components/SubscriptionForm'
 import Link from 'next/link'
 import { ArrowLeft, Share2, Twitter, Linkedin, Facebook } from 'lucide-react'
@@ -115,7 +116,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const authorInfo = {
     name: post.author,
     bio: 'A passionate developer sharing insights about technology, programming, and industry trends. Always learning and building innovative solutions.',
-    avatar: '/default-avatar.png', // You can replace with actual author avatars
+    avatar: '/default-avatar.svg', // You can replace with actual author avatars
     title: 'Tech Blogger & Developer',
     website: 'https://your-portfolio.com',
     github: 'yourusername',
@@ -178,7 +179,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       <div className="min-h-screen bg-[var(--background)]">
         {/* Back Navigation */}
         <div className="bg-[var(--background-secondary)] border-b border-[var(--border-primary)]">
-          <div className="max-w-4xl mx-auto px-4 py-4">
+          <div className="max-w-7xl mx-auto px-4 py-4">
             <Link
               href="/blog"
               className="inline-flex items-center text-[var(--accent-web)] hover:text-[var(--accent-iot)] transition-colors"
@@ -189,43 +190,57 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Blog Post */}
-        <BlogPost post={post} />
+        {/* Main Content with TOC */}
+        <div className="max-w-7xl mx-auto px-4 lg:px-8">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+            {/* Blog Content */}
+            <div className="lg:col-span-8 xl:col-span-9">
+              <BlogPost post={post} />
 
-        {/* Author Bio */}
-        <div className="max-w-4xl mx-auto px-4">
-          <AuthorBio author={authorInfo} />
-        </div>
+              {/* Author Bio */}
+              <div className="max-w-4xl">
+                <AuthorBio author={authorInfo} />
+              </div>
 
-        {/* Share Section */}
-        <div className="max-w-4xl mx-auto px-4 py-8 border-t border-[var(--border-primary)]">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-[var(--text-primary)]">Share this article</h3>
-            <div className="flex space-x-4">
-              <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-iot)] transition-colors"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-ai)] transition-colors"
-              >
-                <Facebook className="h-5 w-5" />
-              </a>
+              {/* Share Section */}
+              <div className="max-w-4xl py-8 border-t border-[var(--border-primary)]">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">Share this article</h3>
+                  <div className="flex space-x-4">
+                    <a
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
+                    >
+                      <Twitter className="h-5 w-5" />
+                    </a>
+                    <a
+                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-iot)] transition-colors"
+                    >
+                      <Linkedin className="h-5 w-5" />
+                    </a>
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 text-[var(--text-secondary)] hover:text-[var(--accent-ai)] transition-colors"
+                    >
+                      <Facebook className="h-5 w-5" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Table of Contents Sidebar */}
+            <div className="hidden lg:block lg:col-span-4 xl:col-span-3">
+              <div className="sticky top-24">
+                <TableOfContents content={post.content} />
+              </div>
             </div>
           </div>
         </div>
@@ -233,7 +248,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
           <div className="bg-[var(--background-secondary)] py-16">
-            <div className="max-w-4xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-4">
               <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-8">Related Articles</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {relatedPosts.map((relatedPost) => (
@@ -268,7 +283,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Newsletter CTA */}
         <div className="bg-[var(--background)] py-16">
-          <div className="max-w-4xl mx-auto px-4">
+          <div className="max-w-7xl mx-auto px-4">
             <SubscriptionForm />
           </div>
         </div>
