@@ -5,19 +5,47 @@ import { Sun, Moon } from 'lucide-react'
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // Check for saved theme preference or default to light mode
+    setMounted(true)
+    
+    // Check for saved theme preference or default to system preference
     const savedTheme = localStorage.getItem('theme')
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-      setIsDark(true)
+    let shouldBeDark = false
+    
+    if (savedTheme) {
+      shouldBeDark = savedTheme === 'dark'
+    } else {
+      shouldBeDark = prefersDark
+    }
+    
+    setIsDark(shouldBeDark)
+    
+    // Apply theme to document
+    if (shouldBeDark) {
       document.documentElement.classList.add('dark')
     } else {
-      setIsDark(false)
       document.documentElement.classList.remove('dark')
     }
+    
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (!localStorage.getItem('theme')) {
+        setIsDark(e.matches)
+        if (e.matches) {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+      }
+    }
+    
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
   const toggleTheme = () => {
@@ -31,6 +59,13 @@ export default function ThemeToggle() {
       document.documentElement.classList.remove('dark')
       localStorage.setItem('theme', 'light')
     }
+  }
+
+  // Avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="w-10 h-10 rounded-lg bg-[var(--card-bg)] border border-[var(--card-border)] animate-pulse" />
+    )
   }
 
   return (

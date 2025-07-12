@@ -96,15 +96,15 @@ export default function PostEditor() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="px-6 py-4 bg-gray-50 border-b">
-          <h1 className="text-2xl font-bold text-gray-900">Create New Blog Post</h1>
+      <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-lg rounded-lg overflow-hidden">
+        <div className="px-6 py-4 bg-[var(--background-secondary)] border-b border-[var(--border-primary)]">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Create New Blog Post</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="title" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
               Title *
             </label>
             <input
@@ -114,14 +114,14 @@ export default function PostEditor() {
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[var(--card-bg)] border border-[var(--border-primary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] text-[var(--text-primary)]"
               placeholder="Enter post title"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="description" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
               Description *
             </label>
             <textarea
@@ -131,7 +131,7 @@ export default function PostEditor() {
               onChange={handleChange}
               required
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[var(--card-bg)] border border-[var(--border-primary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] text-[var(--text-primary)]"
               placeholder="Brief description of the post"
             />
           </div>
@@ -139,7 +139,7 @@ export default function PostEditor() {
           {/* Author & Category */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="author" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="author" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 Author *
               </label>
               <input
@@ -149,13 +149,13 @@ export default function PostEditor() {
                 value={formData.author}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-[var(--card-bg)] border border-[var(--border-primary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] text-[var(--text-primary)]"
                 placeholder="Author name"
               />
             </div>
 
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="category" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 Category *
               </label>
               <select
@@ -164,7 +164,7 @@ export default function PostEditor() {
                 value={formData.category}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-[var(--card-bg)] border border-[var(--border-primary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] text-[var(--text-primary)]"
               >
                 <option value="">Select category</option>
                 <option value="web-development">Web Development</option>
@@ -195,7 +195,7 @@ export default function PostEditor() {
           {/* Cover Image & Tags */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="coverImage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 Cover Image URL *
               </label>
               <input
@@ -205,13 +205,13 @@ export default function PostEditor() {
                 value={formData.coverImage}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-[var(--card-bg)] border border-[var(--border-primary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] text-[var(--text-primary)]"
                 placeholder="https://example.com/image.jpg"
               />
             </div>
 
             <div>
-              <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="tags" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 Tags (comma-separated)
               </label>
               <input
@@ -220,7 +220,7 @@ export default function PostEditor() {
                 name="tags"
                 value={formData.tags}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-[var(--card-bg)] border border-[var(--border-primary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] text-[var(--text-primary)]"
                 placeholder="react, javascript, tutorial"
               />
             </div>
@@ -228,7 +228,7 @@ export default function PostEditor() {
 
           {/* Content - Now using Quill Editor */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
               Content *
             </label>
             <QuillEditor
@@ -268,7 +268,7 @@ export default function PostEditor() {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-[var(--accent-web)] text-white rounded-md hover:bg-[var(--accent-web-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] disabled:opacity-50"
             >
               <Save className="h-4 w-4 mr-2" />
               {isLoading ? 'Saving...' : 'Save Post'}
