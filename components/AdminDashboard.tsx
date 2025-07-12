@@ -24,6 +24,7 @@ import PostsManager from './admin/PostsManager'
 import CategoriesManager from './admin/CategoriesManager'
 import NotificationsManager from './admin/NotificationsManager'
 import AdminStats from './admin/AdminStats'
+import Tooltip from './Tooltip'
 
 type Tab = 'overview' | 'posts' | 'categories' | 'notifications' | 'settings'
 
@@ -102,25 +103,44 @@ export default function AdminDashboard({ initialTab = 'overview' }: AdminDashboa
           <div className="flex space-x-8 overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon
+              const getTooltipText = () => {
+                switch (tab.id) {
+                  case 'overview':
+                    return 'View dashboard overview and key metrics'
+                  case 'posts':
+                    return 'Manage blog posts, create, edit, and publish content'
+                  case 'categories':
+                    return 'Create and manage blog categories'
+                  case 'notifications':
+                    return 'Send email notifications to subscribers'
+                  case 'settings':
+                    return 'Configure admin settings and preferences'
+                  default:
+                    return tab.label
+                }
+              }
               return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as Tab)}
-                  className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    activeTab === tab.id
-                      ? 'border-[var(--accent-web)] text-[var(--accent-web)]'
-                      : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-secondary)]'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{tab.label}</span>
-                  {/* Badge for notifications */}
-                  {tab.id === 'notifications' && stats.pendingNotifications > 0 && (
-                    <span className="bg-[var(--accent-web)] text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
-                      {stats.pendingNotifications}
-                    </span>
-                  )}
-                </button>
+                <Tooltip key={tab.id} content={getTooltipText()} position="bottom">
+                  <button
+                    onClick={() => setActiveTab(tab.id as Tab)}
+                    className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                      activeTab === tab.id
+                        ? 'border-[var(--accent-web)] text-[var(--accent-web)]'
+                        : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-secondary)]'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{tab.label}</span>
+                    {/* Badge for notifications */}
+                    {tab.id === 'notifications' && stats.pendingNotifications > 0 && (
+                      <Tooltip content={`${stats.pendingNotifications} pending notifications`} position="top">
+                        <span className="bg-[var(--accent-web)] text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
+                          {stats.pendingNotifications}
+                        </span>
+                      </Tooltip>
+                    )}
+                  </button>
+                </Tooltip>
               )
             })}
           </div>
@@ -187,36 +207,42 @@ function AdminSettings() {
                 <label className="text-[var(--text-primary)]">
                   Enable Email Notifications
                 </label>
-                <input
-                  type="checkbox"
-                  checked={settings.emailNotifications}
-                  onChange={(e) => setSettings({...settings, emailNotifications: e.target.checked})}
-                  className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)]"
-                />
+                <Tooltip content="Toggle email notifications system on/off" position="left">
+                  <input
+                    type="checkbox"
+                    checked={settings.emailNotifications}
+                    onChange={(e) => setSettings({...settings, emailNotifications: e.target.checked})}
+                    className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)]"
+                  />
+                </Tooltip>
               </div>
               
               <div className="flex items-center justify-between">
                 <label className="text-[var(--text-primary)]">
                   Auto-notify on new post
                 </label>
-                <input
-                  type="checkbox"
-                  checked={settings.autoNotifyNewPost}
-                  onChange={(e) => setSettings({...settings, autoNotifyNewPost: e.target.checked})}
-                  className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)]"
-                />
+                <Tooltip content="Automatically send notification to subscribers when a new post is published" position="left">
+                  <input
+                    type="checkbox"
+                    checked={settings.autoNotifyNewPost}
+                    onChange={(e) => setSettings({...settings, autoNotifyNewPost: e.target.checked})}
+                    className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)]"
+                  />
+                </Tooltip>
               </div>
               
               <div className="flex items-center justify-between">
                 <label className="text-[var(--text-primary)]">
                   Auto-notify on new subscriber
                 </label>
-                <input
-                  type="checkbox"
-                  checked={settings.autoNotifyNewSubscriber}
-                  onChange={(e) => setSettings({...settings, autoNotifyNewSubscriber: e.target.checked})}
-                  className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)]"
-                />
+                <Tooltip content="Automatically send welcome email to new subscribers" position="left">
+                  <input
+                    type="checkbox"
+                    checked={settings.autoNotifyNewSubscriber}
+                    onChange={(e) => setSettings({...settings, autoNotifyNewSubscriber: e.target.checked})}
+                    className="h-4 w-4 text-[var(--accent-web)] focus:ring-[var(--accent-web)]"
+                  />
+                </Tooltip>
               </div>
             </div>
           </div>
@@ -231,37 +257,43 @@ function AdminSettings() {
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                   From Email
                 </label>
-                <input
-                  type="email"
-                  value={settings.notificationFromEmail}
-                  onChange={(e) => setSettings({...settings, notificationFromEmail: e.target.value})}
-                  className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                />
+                <Tooltip content="Email address that will appear as sender in notifications" position="top">
+                  <input
+                    type="email"
+                    value={settings.notificationFromEmail}
+                    onChange={(e) => setSettings({...settings, notificationFromEmail: e.target.value})}
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                  />
+                </Tooltip>
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                   From Name
                 </label>
-                <input
-                  type="text"
-                  value={settings.notificationFromName}
-                  onChange={(e) => setSettings({...settings, notificationFromName: e.target.value})}
-                  className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
-                />
+                <Tooltip content="Name that will appear as sender in notifications" position="top">
+                  <input
+                    type="text"
+                    value={settings.notificationFromName}
+                    onChange={(e) => setSettings({...settings, notificationFromName: e.target.value})}
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-md bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)]"
+                  />
+                </Tooltip>
               </div>
             </div>
           </div>
 
           {/* Save Button */}
           <div className="pt-4 border-t border-[var(--border-primary)]">
-            <button
-              onClick={handleSave}
-              disabled={loading}
-              className="bg-[var(--accent-web)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-web-dark)] disabled:opacity-50 transition-colors"
-            >
-              {loading ? 'Saving...' : 'Save Settings'}
-            </button>
+            <Tooltip content="Save all admin settings and preferences" position="top">
+              <button
+                onClick={handleSave}
+                disabled={loading}
+                className="bg-[var(--accent-web)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-web-dark)] disabled:opacity-50 transition-colors"
+              >
+                {loading ? 'Saving...' : 'Save Settings'}
+              </button>
+            </Tooltip>
           </div>
         </div>
       </div>
