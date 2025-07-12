@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Prism from 'prismjs'
+import { unescapeHtml, isEscapedHtml } from '@/lib/utils'
 import 'prismjs/themes/prism-tomorrow.css'
 import 'prismjs/components/prism-javascript'
 import 'prismjs/components/prism-typescript'
@@ -25,7 +26,19 @@ export default function QuillContent({ content, className = '' }: QuillContentPr
 
   useEffect(() => {
     if (contentRef.current) {
-      // Apply theme-aware Tailwind classes to Quill-generated HTML elements
+      // Check if content contains escaped HTML and fix it
+      let processedContent = content
+      if (isEscapedHtml(content)) {
+        processedContent = unescapeHtml(content)
+        console.log('Detected and fixed escaped HTML content')
+      }
+
+      // Update the content if it was fixed
+      if (processedContent !== content) {
+        contentRef.current.innerHTML = processedContent
+      }
+
+      // Apply theme-aware Tailwind classes to HTML elements
       const elements = contentRef.current.querySelectorAll('*')
       
       elements.forEach((element) => {
@@ -130,8 +143,8 @@ export default function QuillContent({ content, className = '' }: QuillContentPr
           const mappedLanguage = languageMap[language] || language
           codeElement.className = `language-${mappedLanguage}`
         } else {
-          // Default to javascript if no language specified
-          codeElement.className = 'language-javascript'
+          // Default to python for code blocks without language
+          codeElement.className = 'language-python'
         }
       })
 
@@ -140,11 +153,14 @@ export default function QuillContent({ content, className = '' }: QuillContentPr
     }
   }, [content])
 
+  // Check if content contains escaped HTML and fix it
+  const processedContent = isEscapedHtml(content) ? unescapeHtml(content) : content
+
   return (
     <div 
       ref={contentRef}
       className={`prose prose-lg max-w-none ${className}`}
-      dangerouslySetInnerHTML={{ __html: content }}
+      dangerouslySetInnerHTML={{ __html: processedContent }}
     />
   )
 }

@@ -100,3 +100,46 @@ export function formatReadingTime(minutes: number): string {
   }
   return `${minutes} min read`
 } 
+
+/**
+ * Unescape HTML entities and convert escaped HTML back to proper HTML
+ */
+export function unescapeHtml(text: string): string {
+  // First handle basic HTML entities
+  let result = text
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;/g, "'")
+    .replace(/&#x2F;/g, '/')
+    .replace(/&#x60;/g, '`')
+    .replace(/&#x3D;/g, '=')
+    .replace(/&nbsp;/g, ' ')
+    
+  // Handle Unicode escape sequences common in Quill/React content
+  result = result
+    .replace(/\\u003c/gi, '<')
+    .replace(/\\u003e/gi, '>')
+    .replace(/\\u0026/gi, '&')
+    .replace(/\\u0022/gi, '"')
+    .replace(/\\u0027/gi, "'")
+    .replace(/\\u002F/gi, '/')
+    .replace(/\\u003D/gi, '=')
+  
+  return result
+}
+
+/**
+ * Check if content contains escaped HTML
+ */
+export function isEscapedHtml(content: string): boolean {
+  return (
+    content.includes('&lt;') || 
+    content.includes('&gt;') || 
+    content.includes('&amp;') ||
+    content.includes('\\u003c') ||
+    content.includes('\\u003e') ||
+    content.includes('\\u0026')
+  )
+} 
