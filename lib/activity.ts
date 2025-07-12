@@ -44,7 +44,7 @@ export async function logActivity({
         type,
         title,
         details,
-        metadata: metadata ? JSON.stringify(metadata) : null,
+        metadata: metadata || undefined,
         createdBy
       }
     })
