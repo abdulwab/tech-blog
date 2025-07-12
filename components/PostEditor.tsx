@@ -172,8 +172,22 @@ export default function PostEditor() {
                 <option value="react">React</option>
                 <option value="nextjs">Next.js</option>
                 <option value="nodejs">Node.js</option>
+                <option value="artificial-intelligence">Artificial Intelligence</option>
+                <option value="machine-learning">Machine Learning</option>
+                <option value="large-language-models">Large Language Models</option>
+                <option value="iot">Internet of Things (IoT)</option>
+                <option value="robotics">Robotics</option>
+                <option value="data-science">Data Science</option>
+                <option value="blockchain">Blockchain</option>
+                <option value="cybersecurity">Cybersecurity</option>
+                <option value="cloud-computing">Cloud Computing</option>
+                <option value="devops">DevOps</option>
+                <option value="mobile-development">Mobile Development</option>
+                <option value="python">Python</option>
                 <option value="tutorials">Tutorials</option>
                 <option value="tips">Tips & Tricks</option>
+                <option value="industry-trends">Industry Trends</option>
+                <option value="tech-news">Tech News</option>
               </select>
             </div>
           </div>
