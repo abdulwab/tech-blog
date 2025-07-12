@@ -120,6 +120,26 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    // Log activity
+    const activityType = isPublished ? 'post_published' : 'post_created'
+    const activityTitle = isPublished 
+      ? `Published new post: "${title}"`
+      : `Created new draft post: "${title}"`
+    
+    await logActivity({
+      type: activityType,
+      title: activityTitle,
+      details: `${isPublished ? 'Published' : 'Created'} post in ${category} category`,
+      metadata: {
+        postId: post.id,
+        postSlug: post.slug,
+        category: post.category,
+        tags: post.tags,
+        author: post.author
+      },
+      createdBy: userId
+    })
+
     return NextResponse.json(post, { status: 201 })
   } catch (error) {
     console.error('Error creating post:', error)
