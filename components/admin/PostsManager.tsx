@@ -216,6 +216,30 @@ export default function PostsManager() {
     }
   }
 
+  if (showForm) {
+    const formData = editingPost ? {
+      id: editingPost.id,
+      slug: editingPost.slug,
+      title: editingPost.title,
+      description: editingPost.description,
+      content: '', // Will be loaded from API
+      coverImage: editingPost.coverImage,
+      author: editingPost.author,
+      category: editingPost.category,
+      tags: editingPost.tags.join(', '),
+      isFeatured: editingPost.isFeatured,
+      isPublished: editingPost.isPublished,
+    } : undefined
+
+    return (
+      <PostEditor
+        initialData={formData}
+        onSave={handleFormSave}
+        onCancel={handleFormCancel}
+      />
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -459,6 +483,7 @@ export default function PostsManager() {
                           <Star className="h-4 w-4" />
                         </button>
                         <button
+                          onClick={() => handleEditPost(post)}
                           className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
                           title="Edit Post"
                         >

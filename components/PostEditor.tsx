@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createSlug } from '@/lib/utils'
 import { Save, Eye, Upload } from 'lucide-react'
 import QuillEditor from './QuillEditor'
@@ -37,7 +37,27 @@ export default function PostEditor({ initialData, onSave, onCancel }: PostEditor
   })
   const [isLoading, setIsLoading] = useState(false)
   const [preview, setPreview] = useState(false)
+  const [loadingContent, setLoadingContent] = useState(false)
   const isEditing = Boolean(initialData?.id)
+
+  // Fetch full post content when editing
+  useEffect(() => {
+    if (initialData?.id && !initialData?.content) {
+      setLoadingContent(true)
+      fetch(`/api/posts/${initialData.slug}`)
+        .then(response => response.json())
+        .then(post => {
+          if (post.content) {
+            setFormData(prev => ({
+              ...prev,
+              content: post.content
+            }))
+          }
+        })
+        .catch(error => console.error('Error fetching post content:', error))
+        .finally(() => setLoadingContent(false))
+    }
+  }, [initialData?.id, initialData?.slug, initialData?.content])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
