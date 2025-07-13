@@ -315,6 +315,28 @@ function AdminSettings() {
             </div>
           </div>
 
+          {/* SMTP Test */}
+          <div>
+            <h3 className="text-lg font-medium text-[var(--text-primary)] mb-4">
+              Email Server Test
+            </h3>
+            <div className="bg-[var(--background-secondary)] p-4 rounded-lg border border-[var(--border-primary)]">
+              <p className="text-sm text-[var(--text-secondary)] mb-4">
+                Test your SMTP connection to ensure email notifications are working properly.
+              </p>
+              <Tooltip content="Test SMTP server connection and configuration" position="top">
+                <button
+                  onClick={handleTestSmtp}
+                  disabled={testingSmtp}
+                  className="bg-[var(--accent-iot)] text-white px-4 py-2 rounded-md hover:bg-[var(--accent-iot-dark)] disabled:opacity-50 transition-colors flex items-center space-x-2"
+                >
+                  <Mail className="h-4 w-4" />
+                  <span>{testingSmtp ? 'Testing...' : 'Test SMTP Connection'}</span>
+                </button>
+              </Tooltip>
+            </div>
+          </div>
+
           {/* Save Button */}
           <div className="pt-4 border-t border-[var(--border-primary)]">
             <Tooltip content="Save all admin settings and preferences" position="top">
