@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
-import { sendEmail, createNewPostEmailTemplate } from '@/lib/email'
+import { sendNewPostNotification } from '@/lib/email'
 
 export const runtime = 'nodejs'
 
@@ -49,50 +49,21 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create email template
-    const emailHtml = createNewPostEmailTemplate({
+    // Send new post notification using our comprehensive email system
+    const subscriberEmails = subscribers.map(sub => sub.email)
+    
+    const result = await sendNewPostNotification({
       title: post.title,
       description: post.description,
       slug: post.slug,
       coverImage: post.coverImage,
       author: post.author,
-    })
+      category: post.category,
+      publishedAt: post.createdAt.toISOString()
+    }, subscriberEmails)
 
-    // Send emails in batches to avoid overwhelming the email service
-    const batchSize = 50
-    const batches = []
-    
-    for (let i = 0; i < subscribers.length; i += batchSize) {
-      batches.push(subscribers.slice(i, i + batchSize))
-    }
-
-    let successCount = 0
-    let errorCount = 0
-
-    for (const batch of batches) {
-      const emailPromises = batch.map(subscriber =>
-        sendEmail({
-          to: [subscriber.email],
-          subject: `New Post: ${post.title}`,
-          html: emailHtml,
-        })
-      )
-
-      const results = await Promise.allSettled(emailPromises)
-      
-      results.forEach(result => {
-        if (result.status === 'fulfilled' && result.value.success) {
-          successCount++
-        } else {
-          errorCount++
-        }
-      })
-
-      // Wait a bit between batches to avoid rate limiting
-      if (batches.indexOf(batch) < batches.length - 1) {
-        await new Promise(resolve => setTimeout(resolve, 1000))
-      }
-    }
+    const successCount = result.successCount || 0
+    const errorCount = result.failedCount || 0
 
     return NextResponse.json(
       {
