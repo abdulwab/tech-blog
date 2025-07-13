@@ -172,6 +172,7 @@ function AdminSettings() {
   })
 
   const [loading, setLoading] = useState(false)
+  const [testingSmtp, setTestingSmtp] = useState(false)
 
   const handleSave = async () => {
     setLoading(true)
@@ -192,6 +193,31 @@ function AdminSettings() {
       alert('Failed to save settings')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleTestSmtp = async () => {
+    setTestingSmtp(true)
+    try {
+      const response = await fetch('/api/admin/test-smtp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      const result = await response.json()
+      
+      if (result.success) {
+        alert(result.message)
+      } else {
+        alert(result.error)
+      }
+    } catch (error) {
+      console.error('Error testing SMTP:', error)
+      alert('Failed to test SMTP connection')
+    } finally {
+      setTestingSmtp(false)
     }
   }
 
