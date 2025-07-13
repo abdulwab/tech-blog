@@ -47,6 +47,7 @@ export async function sendEmail({ to, subject, html, text }: EmailData) {
       try {
         const info = await transporter.sendMail({
           from: `"${process.env.EMAIL_FROM_NAME || 'TechBlog'}" <${process.env.EMAIL_FROM}>`,
+          replyTo: process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM,
           to: email,
           subject,
           html,
