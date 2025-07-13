@@ -95,6 +95,25 @@ export async function testSMTPConnection() {
   }
 }
 
+// Gmail daily sending limits
+export const GMAIL_DAILY_LIMIT = 500 // Free Gmail account
+export const GMAIL_RATE_LIMIT = 30 // Emails per minute
+
+// Get Gmail sending guidelines
+export function getGmailLimits() {
+  return {
+    dailyLimit: GMAIL_DAILY_LIMIT,
+    rateLimit: GMAIL_RATE_LIMIT,
+    recommendations: [
+      'Free Gmail: 500 emails per day',
+      'Google Workspace: 2,000 emails per day',
+      'Rate limit: ~30 emails per minute',
+      'Limit resets every 24 hours',
+      'Enable 2FA and use app password'
+    ]
+  }
+}
+
 // Email template interfaces
 export interface NewPostEmailData {
   title: string
