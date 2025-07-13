@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@clerk/nextjs/server'
-import { Resend } from 'resend'
+import { sendNewsletterEmail, createNewsletterTemplate } from '@/lib/email'
 import { logActivity } from '@/lib/activity'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 // POST send notification
 export async function POST(request: NextRequest) {
@@ -56,30 +54,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No recipients found' }, { status: 400 })
     }
 
-    // Send emails in batches to avoid rate limiting
-    const batchSize = 10
-    let sentCount = 0
-    let failedCount = 0
+    // Send newsletter using our new email system
+    const unsubscribeUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/subscribe?action=unsubscribe`
+    
+    const result = await sendNewsletterEmail({
+      subject: notification.subject,
+      content: notification.content,
+      unsubscribeUrl
+    }, recipients)
 
-    for (let i = 0; i < recipients.length; i += batchSize) {
-      const batch = recipients.slice(i, i + batchSize)
-      
-      try {
-        await resend.emails.send({
-          from: 'TechBlog <noreply@techblog.com>',
-          to: batch,
-          subject: notification.subject,
-          html: notification.content
-        })
-        sentCount += batch.length
-      } catch (error) {
-        console.error('Error sending email batch:', error)
-        failedCount += batch.length
-      }
-
-      // Small delay between batches
-      await new Promise(resolve => setTimeout(resolve, 1000))
-    }
+    const sentCount = result.successCount || 0
+    const failedCount = result.failedCount || 0
 
     // Update notification status
     await prisma.emailNotification.update({
