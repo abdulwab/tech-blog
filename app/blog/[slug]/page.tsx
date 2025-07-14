@@ -143,7 +143,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'TechBlog',
+                    name: 'Abdul Wahab',
       logo: {
         '@type': 'ImageObject',
         url: `${process.env.NEXT_PUBLIC_APP_URL}/default-avatar.svg`,
