@@ -46,7 +46,7 @@ export async function sendEmail({ to, subject, html, text }: EmailData) {
     for (const email of to) {
       try {
         const info = await transporter.sendMail({
-          from: `"${process.env.EMAIL_FROM_NAME || 'TechBlog'}" <${process.env.EMAIL_FROM}>`,
+          from: `"${process.env.EMAIL_FROM_NAME || 'Abdul Wahab'}" <${process.env.EMAIL_FROM}>`,
           replyTo: process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM,
           to: email,
           subject,
@@ -274,7 +274,7 @@ export function createNewPostEmailTemplate(data: NewPostEmailData): string {
 <body>
     <div class="container">
         <div class="header">
-            <h1>📚 TechBlog</h1>
+            <h1>📚 Abdul Wahab</h1>
             <p>New post published just for you!</p>
         </div>
         
@@ -305,7 +305,7 @@ export function createNewPostEmailTemplate(data: NewPostEmailData): string {
             </div>
             
             <p style="margin-top: 20px; font-size: 12px;">
-                © ${new Date().getFullYear()} TechBlog. All rights reserved.<br>
+                © ${new Date().getFullYear()} Abdul Wahab. All rights reserved.<br>
                 <a href="${unsubscribeUrl}">Unsubscribe</a> from future emails.
             </p>
         </div>
@@ -402,7 +402,7 @@ export function createNewsletterTemplate(data: NewsletterEmailData): string {
         
         <div class="footer">
             <p><strong>Thanks for reading!</strong></p>
-            <p>© ${new Date().getFullYear()} TechBlog. All rights reserved.</p>
+            <p>© ${new Date().getFullYear()} Abdul Wahab. All rights reserved.</p>
             <p><a href="${unsubscribeUrl}">Unsubscribe</a> from future emails.</p>
         </div>
     </div>

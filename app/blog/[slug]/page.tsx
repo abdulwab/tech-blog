@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   } catch (error) {
     // If database is not available during build, return basic metadata
     return {
-      title: 'TechBlog Post',
+      title: 'Abdul Wahab - Blog Post',
       description: 'Read the latest tech articles on our blog',
     }
   }

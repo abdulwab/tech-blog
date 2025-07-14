@@ -12,10 +12,10 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <BookOpen className="h-8 w-8 text-[var(--accent-web)]" />
-              <span className="text-xl font-bold text-[var(--text-primary)]">TechBlog</span>
+              <span className="text-xl font-bold text-[var(--text-primary)]">Abdul Wahab</span>
             </Link>
             <p className="text-[var(--text-secondary)] mb-4 max-w-md">
-              A modern tech blog delivering cutting-edge insights, tutorials, and industry news 
+                              Personal blog sharing insights, tutorials, and development journey by Abdul Wahab 
               to help developers and tech enthusiasts stay ahead of the curve.
             </p>
             <div className="flex space-x-4">
@@ -102,7 +102,7 @@ export default function Footer() {
         <div className="mt-8 pt-8 border-t border-[var(--border-primary)]">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-[var(--text-secondary)] text-sm">
-              © {currentYear} TechBlog. All rights reserved.
+              © {currentYear} Abdul Wahab. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link href="/privacy" className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] text-sm transition-colors">
