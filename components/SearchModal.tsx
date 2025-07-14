@@ -78,13 +78,13 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     } else if (e.key === 'Enter' && selectedIndex >= 0) {
       e.preventDefault()
       const result = results[selectedIndex]
-      router.push(`/blog/${result.slug}`)
+      router.push(`/${result.slug}`)
       onClose()
     }
   }
 
   const handleResultClick = (slug: string) => {
-    router.push(`/blog/${slug}`)
+    router.push(`/${slug}`)
     onClose()
   }
 
