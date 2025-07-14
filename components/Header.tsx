@@ -41,7 +41,7 @@ export default function Header() {
                 href="/" 
                 className="text-xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-web)] transition-colors"
               >
-                TechBlog
+                Abdul Wahab
               </Link>
             </div>
 
