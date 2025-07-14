@@ -74,7 +74,7 @@ model AdminSettings {
   autoNotifyNewPost     Boolean  @default(true)
   autoNotifyNewSubscriber Boolean @default(true)
   notificationFromEmail String   @default("noreply@techblog.com")
-  notificationFromName  String   @default("TechBlog")
+  notificationFromName  String   @default("Abdul Wahab")
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 
