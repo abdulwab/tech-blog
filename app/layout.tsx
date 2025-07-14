@@ -8,20 +8,20 @@ import Footer from '@/components/Footer'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Tech Blog',
-  description: 'A modern tech blog with cutting-edge insights',
-  keywords: ['technology', 'programming', 'web development', 'software'],
-  authors: [{ name: 'Tech Blog' }],
+  title: 'Abdul Wahab',
+  description: 'Personal blog sharing insights, tutorials, and development journey',
+  keywords: ['abdul wahab', 'programming', 'web development', 'software'],
+  authors: [{ name: 'Abdul Wahab' }],
   openGraph: {
-    title: 'Tech Blog',
-    description: 'A modern tech blog with cutting-edge insights',
+    title: 'Abdul Wahab',
+    description: 'Personal blog sharing insights, tutorials, and development journey',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tech Blog',
-    description: 'A modern tech blog with cutting-edge insights',
+    title: 'Abdul Wahab',
+    description: 'Personal blog sharing insights, tutorials, and development journey',
   },
 }
 
