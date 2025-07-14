@@ -1,8 +1,8 @@
-# 🔐 Full-Stack Tech Blog with Admin Panel
+# 🔐 Abdul Wahab - Full-Stack Blog with Admin Panel
 
 A secure, full-stack technical blog built with **Next.js 14+**, **Prisma**, **PostgreSQL**, and **Clerk** authentication. Features a complete CMS, email subscriptions, SEO optimization, and a beautiful responsive design.
 
-![Tech Blog](https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1200&h=600&fit=crop)
+![Abdul Wahab Blog](https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1200&h=600&fit=crop)
 
 ## ✨ Features
 
