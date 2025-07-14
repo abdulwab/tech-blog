@@ -54,7 +54,7 @@ export default async function HomePage() {
                   key={post.id}
                   className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
                 >
-                  <Link href={`/blog/${post.slug}`}>
+                  <Link href={`/${post.slug}`}>
                     <Image
                       src={post.coverImage}
                       alt={post.title}
@@ -69,7 +69,7 @@ export default async function HomePage() {
                         {formatCategory(post.category)}
                       </span>
                     </div>
-                    <Link href={`/blog/${post.slug}`}>
+                    <Link href={`/${post.slug}`}>
                       <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2 hover:text-[var(--accent-web)] transition-colors line-clamp-2">
                         {post.title}
                       </h3>
@@ -112,7 +112,7 @@ export default async function HomePage() {
                 key={post.id}
                 className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
               >
-                <Link href={`/blog/${post.slug}`}>
+                <Link href={`/${post.slug}`}>
                   <Image
                     src={post.coverImage}
                     alt={post.title}
@@ -127,7 +127,7 @@ export default async function HomePage() {
                       {formatCategory(post.category)}
                     </span>
                   </div>
-                  <Link href={`/blog/${post.slug}`}>
+                  <Link href={`/${post.slug}`}>
                     <h3 className="text-base font-semibold text-[var(--text-primary)] mb-2 hover:text-[var(--accent-web)] transition-colors line-clamp-2">
                       {post.title}
                     </h3>
