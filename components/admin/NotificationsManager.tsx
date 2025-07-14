@@ -16,6 +16,7 @@ import {
   PlusCircle 
 } from 'lucide-react'
 import Tooltip from '../Tooltip'
+import PostNotificationManager from '../PostNotificationManager'
 
 interface EmailNotification {
   id: string
@@ -269,6 +270,9 @@ export default function NotificationsManager() {
           </button>
         </Tooltip>
       </div>
+
+      {/* Post Notifications Section */}
+      <PostNotificationManager />
 
       {/* Filter */}
       <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-4">
