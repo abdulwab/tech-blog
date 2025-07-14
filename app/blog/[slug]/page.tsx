@@ -116,7 +116,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     name: post.author,
     bio: 'A passionate developer sharing insights about technology, programming, and industry trends. Always learning and building innovative solutions.',
     avatar: '/default-avatar.svg', // You can replace with actual author avatars
-    title: 'Tech Blogger & Developer',
+                    title: 'Abdul Wahab - Developer & Content Creator',
     website: 'https://your-portfolio.com',
     github: 'yourusername',
     twitter: 'yourusername',
