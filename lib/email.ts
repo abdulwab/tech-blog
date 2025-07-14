@@ -134,7 +134,7 @@ export interface NewsletterEmailData {
 // Create beautiful HTML email template for new posts
 export function createNewPostEmailTemplate(data: NewPostEmailData): string {
   const { title, description, slug, coverImage, author, category, publishedAt } = data
-  const postUrl = `${process.env.NEXT_PUBLIC_APP_URL}/blog/${slug}`
+  const postUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${slug}`
   const unsubscribeUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/subscribe?action=unsubscribe`
   const blogUrl = `${process.env.NEXT_PUBLIC_APP_URL}/blog`
   
