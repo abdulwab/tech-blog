@@ -478,7 +478,7 @@ export default function PostsManager() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center space-x-2">
                         <button
-                          onClick={() => window.open(`/blog/${post.slug}`, '_blank')}
+                          onClick={() => window.open(`/${post.slug}`, '_blank')}
                           className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
                           title="View Post"
                         >
