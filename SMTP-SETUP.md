@@ -2,7 +2,7 @@
 
 ## Overview
 
-Your TechBlog now uses **Nodemailer with SMTP** for sending email notifications instead of third-party services like Resend. This gives you full control over email delivery and better reliability.
+Your Abdul Wahab blog now uses **Nodemailer with SMTP** for sending email notifications instead of third-party services like Resend. This gives you full control over email delivery and better reliability.
 
 ## ✅ Features Implemented
 
