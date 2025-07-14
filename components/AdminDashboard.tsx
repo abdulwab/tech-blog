@@ -168,7 +168,7 @@ function AdminSettings() {
     autoNotifyNewPost: true,
     autoNotifyNewSubscriber: true,
     notificationFromEmail: 'noreply@techblog.com',
-    notificationFromName: 'TechBlog'
+              notificationFromName: 'Abdul Wahab'
   })
 
   const [loading, setLoading] = useState(false)

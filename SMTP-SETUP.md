@@ -28,7 +28,7 @@ SMTP_PASS=your-app-password
 
 # Email Settings
 EMAIL_FROM=noreply@yourdomain.com
-EMAIL_FROM_NAME=TechBlog
+EMAIL_FROM_NAME=Abdul Wahab
 ```
 
 ## 📧 SMTP Provider Configurations

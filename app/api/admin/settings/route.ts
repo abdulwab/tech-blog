@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
           autoNotifyNewPost: true,
           autoNotifyNewSubscriber: true,
           notificationFromEmail: 'noreply@techblog.com',
-          notificationFromName: 'TechBlog'
+          notificationFromName: 'Abdul Wahab'
         }
       })
       return NextResponse.json(defaultSettings)
