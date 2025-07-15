@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Github, Twitter, Linkedin, Globe, Mail } from 'lucide-react'
+import { Github, Linkedin, Globe, MessageCircle } from 'lucide-react'
 
 interface AuthorBioProps {
   author: {
@@ -12,9 +12,8 @@ interface AuthorBioProps {
     title?: string
     website?: string
     github?: string
-    twitter?: string
     linkedin?: string
-    email?: string
+    discord?: string
   }
 }
 
@@ -29,20 +28,20 @@ export default function AuthorBio({ author }: AuthorBioProps) {
             alt={author.name}
             width={80}
             height={80}
-            className="w-20 h-20 rounded-full object-cover"
+            className="rounded-full border-2 border-[var(--border-primary)]"
           />
         </div>
 
         {/* Content */}
         <div className="flex-1">
-          <div className="mb-3">
-            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">
+          <div className="flex items-center mb-2">
+            <h3 className="text-xl font-semibold text-[var(--text-primary)]">
               {author.name}
             </h3>
             {author.title && (
-              <p className="text-sm text-[var(--text-secondary)] mb-2">
+              <span className="ml-2 px-2 py-1 bg-[var(--accent-web)] text-white text-xs rounded-full">
                 {author.title}
-              </p>
+              </span>
             )}
           </div>
 
@@ -58,14 +57,14 @@ export default function AuthorBio({ author }: AuthorBioProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
-                title="Website"
+                title="Portfolio"
               >
                 <Globe className="h-5 w-5" />
               </Link>
             )}
             {author.github && (
               <Link
-                href={`https://github.com/${author.github}`}
+                href={author.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
@@ -74,20 +73,9 @@ export default function AuthorBio({ author }: AuthorBioProps) {
                 <Github className="h-5 w-5" />
               </Link>
             )}
-            {author.twitter && (
-              <Link
-                href={`https://twitter.com/${author.twitter}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
-                title="Twitter"
-              >
-                <Twitter className="h-5 w-5" />
-              </Link>
-            )}
             {author.linkedin && (
               <Link
-                href={`https://linkedin.com/in/${author.linkedin}`}
+                href={author.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[var(--text-secondary)] hover:text-[var(--accent-iot)] transition-colors"
@@ -96,13 +84,15 @@ export default function AuthorBio({ author }: AuthorBioProps) {
                 <Linkedin className="h-5 w-5" />
               </Link>
             )}
-            {author.email && (
+            {author.discord && (
               <Link
-                href={`mailto:${author.email}`}
+                href={author.discord}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[var(--text-secondary)] hover:text-[var(--accent-ai)] transition-colors"
-                title="Email"
+                title="Discord Community"
               >
-                <Mail className="h-5 w-5" />
+                <MessageCircle className="h-5 w-5" />
               </Link>
             )}
           </div>
