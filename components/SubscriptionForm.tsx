@@ -27,6 +27,10 @@ export default function SubscriptionForm() {
         setStatus('success')
         setMessage('Successfully subscribed! Welcome to our community.')
         setEmail('')
+        
+        // Mark user as subscribed to prevent showing modal
+        localStorage.setItem('user-subscribed', 'true')
+        localStorage.setItem('subscription-modal-seen', 'true')
       } else {
         setStatus('error')
         setMessage(data.error || 'Something went wrong. Please try again.')
