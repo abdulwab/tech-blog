@@ -117,11 +117,10 @@ export default async function BlogPostPage({ params }: PageProps) {
     bio: 'A passionate developer sharing insights about technology, programming, and industry trends. Always learning and building innovative solutions.',
     avatar: '/default-avatar.svg', // You can replace with actual author avatars
     title: 'Abdul Wahab - Developer & Content Creator',
-    website: 'https://your-portfolio.com',
-    github: 'yourusername',
-    twitter: 'yourusername',
-    linkedin: 'yourusername',
-    email: 'your@email.com'
+    website: 'https://www.abdulwahab.live/',
+    github: 'https://github.com/abdulwab',
+    linkedin: 'https://www.linkedin.com/in/abdul-wahab-7bb7b490/',
+    discord: 'https://discord.gg/VkAW9rEn'
   }
 
   const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${post.slug}`
