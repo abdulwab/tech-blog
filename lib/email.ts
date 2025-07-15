@@ -144,7 +144,7 @@ export function createNewPostEmailTemplate(data: NewPostEmailData): string {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Post: ${title}</title>
+    <title>${title}</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -275,13 +275,14 @@ export function createNewPostEmailTemplate(data: NewPostEmailData): string {
     <div class="container">
         <div class="header">
             <h1>📚 Abdul Wahab</h1>
-            <p>New post published just for you!</p>
+            <p>Published just for you!</p>
         </div>
         
         <div class="content">
+        <h2 class="post-title">${title}</h2>
             <img src="${coverImage}" alt="${title}" class="post-image" />
             
-            <h2 class="post-title">${title}</h2>
+            
             
             <div class="post-meta">
                 <span>✍️ By ${author}</span>
