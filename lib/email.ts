@@ -413,7 +413,7 @@ export function createNewsletterTemplate(data: NewsletterEmailData): string {
 
 // Quick send function for new post notifications
 export async function sendNewPostNotification(postData: NewPostEmailData, subscribers: string[]) {
-  const subject = `📚 New Post: ${postData.title}`
+  const subject = `${postData.title}`
   const html = createNewPostEmailTemplate(postData)
   
   const result = await sendEmail({
