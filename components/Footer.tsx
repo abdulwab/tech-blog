@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { BookOpen, Github, Twitter, Linkedin } from 'lucide-react'
+import { BookOpen, Github, Linkedin, MessageCircle, Globe } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -15,30 +15,45 @@ export default function Footer() {
               <span className="text-xl font-bold text-[var(--text-primary)]">Abdul Wahab</span>
             </Link>
             <p className="text-[var(--text-secondary)] mb-4 max-w-md">
-                              Personal blog sharing insights, tutorials, and development journey by Abdul Wahab 
+              Personal blog sharing insights, tutorials, and development journey by Abdul Wahab 
               to help developers and tech enthusiasts stay ahead of the curve.
             </p>
             <div className="flex space-x-4">
               <a 
-                href="#" 
-                className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
+                href="https://github.com/abdulwab" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors footer-social-icons"
                 aria-label="GitHub"
               >
                 <Github className="h-5 w-5" />
               </a>
               <a 
-                href="#" 
-                className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a 
-                href="#" 
-                className="text-[var(--text-secondary)] hover:text-[var(--accent-iot)] transition-colors"
+                href="https://www.linkedin.com/in/abdul-wahab-7bb7b490/" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--text-secondary)] hover:text-[var(--accent-iot)] transition-colors footer-social-icons"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://discord.gg/VkAW9rEn" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--text-secondary)] hover:text-[var(--accent-ai)] transition-colors footer-social-icons"
+                aria-label="Discord Community"
+              >
+                <MessageCircle className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://www.abdulwahab.live/" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--text-secondary)] hover:text-[var(--accent-web)] transition-colors footer-social-icons"
+                aria-label="Portfolio"
+              >
+                <Globe className="h-5 w-5" />
               </a>
             </div>
           </div>
