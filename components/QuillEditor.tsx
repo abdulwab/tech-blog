@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { Code, Eye, FileText } from 'lucide-react'
+import QuillContent from './QuillContent'
 import 'react-quill/dist/quill.snow.css'
 
 // Dynamically import ReactQuill to avoid SSR issues
@@ -132,9 +133,9 @@ export default function QuillEditor({ value, onChange, placeholder }: QuillEdito
           </div>
         </div>
         <div className="text-xs text-[var(--text-secondary)]">
-          {mode === 'html' && 'Paste your HTML content here'}
-          {mode === 'wysiwyg' && 'WYSIWYG Editor'}
-          {mode === 'preview' && 'Preview Mode'}
+          {mode === 'html' && 'Edit HTML source code directly'}
+          {mode === 'wysiwyg' && 'Visual rich text editor'}
+          {mode === 'preview' && 'Preview final result with full styling'}
         </div>
       </div>
 
@@ -154,21 +155,28 @@ export default function QuillEditor({ value, onChange, placeholder }: QuillEdito
         )}
 
         {mode === 'html' && (
-          <textarea
-            value={htmlContent}
-            onChange={(e) => handleHtmlChange(e.target.value)}
-            placeholder="Paste your HTML content here..."
-            className="w-full h-96 p-4 border-0 resize-none focus:outline-none bg-[var(--card-bg)] text-[var(--text-primary)] font-mono text-sm"
-            style={{ minHeight: '400px' }}
-          />
+          <div className="relative">
+            <textarea
+              value={htmlContent}
+              onChange={(e) => handleHtmlChange(e.target.value)}
+              placeholder="Paste your HTML content here..."
+              className="w-full h-96 p-4 border-0 resize-none focus:outline-none bg-[var(--card-bg)] text-[var(--text-primary)] font-mono text-sm leading-relaxed"
+              style={{ minHeight: '400px' }}
+            />
+            <div className="absolute top-2 right-2 text-xs text-[var(--text-secondary)]">
+              Line: {htmlContent.split('\n').length}
+            </div>
+          </div>
         )}
 
         {mode === 'preview' && (
-          <div className="p-4 prose prose-lg max-w-none bg-[var(--card-bg)]">
-            <div 
-              className="text-[var(--text-primary)]"
-              dangerouslySetInnerHTML={{ __html: htmlContent || value }}
-            />
+          <div className="p-6 bg-[var(--background)] min-h-[400px]">
+            <div className="max-w-none">
+              <QuillContent 
+                content={htmlContent || value} 
+                className="preview-content"
+              />
+            </div>
           </div>
         )}
       </div>
@@ -211,6 +219,12 @@ export default function QuillEditor({ value, onChange, placeholder }: QuillEdito
         }
         .quill-editor .ql-toolbar button.ql-active .ql-fill {
           fill: var(--accent-web);
+        }
+        
+        /* Enhanced preview styling */
+        .preview-content {
+          font-size: 16px;
+          line-height: 1.7;
         }
       `}</style>
     </div>
