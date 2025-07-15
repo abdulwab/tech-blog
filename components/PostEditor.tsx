@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { createSlug } from '@/lib/utils'
-import { Save, Eye, Upload } from 'lucide-react'
 import QuillEditor from './QuillEditor'
+import CategorySelect from './CategorySelect'
+import ImageUpload from './ImageUpload'
+import { Save, Eye, Upload } from 'lucide-react'
 
 interface PostFormData {
   title: string
@@ -285,21 +287,12 @@ export default function PostEditor({ initialData, onSave, onCancel }: PostEditor
 
           {/* Cover Image & Tags */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="coverImage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                Cover Image URL *
-              </label>
-              <input
-                type="url"
-                id="coverImage"
-                name="coverImage"
-                value={formData.coverImage}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 bg-[var(--card-bg)] border border-[var(--border-primary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-web)] text-[var(--text-primary)]"
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
+            <ImageUpload
+              value={formData.coverImage}
+              onChange={(url) => setFormData(prev => ({ ...prev, coverImage: url }))}
+              label="Cover Image"
+              required
+            />
 
             <div>
               <label htmlFor="tags" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
