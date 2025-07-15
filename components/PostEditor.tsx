@@ -74,7 +74,12 @@ export default function PostEditor({ initialData, onSave, onCancel }: PostEditor
     if (initialData?.id && !initialData?.content) {
       setLoadingContent(true)
       fetch(`/api/posts/${initialData.slug}`)
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to fetch post content')
+          }
+          return response.json()
+        })
         .then(post => {
           if (post.content) {
             setFormData(prev => ({
@@ -83,7 +88,10 @@ export default function PostEditor({ initialData, onSave, onCancel }: PostEditor
             }))
           }
         })
-        .catch(error => console.error('Error fetching post content:', error))
+        .catch(error => {
+          console.error('Error fetching post content:', error)
+          alert('Failed to load post content. Please try again.')
+        })
         .finally(() => setLoadingContent(false))
     }
   }, [initialData?.id, initialData?.slug, initialData?.content])
@@ -314,12 +322,26 @@ export default function PostEditor({ initialData, onSave, onCancel }: PostEditor
           <div>
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
               Content *
+              {loadingContent && (
+                <span className="ml-2 text-sm text-[var(--text-secondary)]">
+                  (Loading content...)
+                </span>
+              )}
             </label>
-            <QuillEditor
-              value={formData.content}
-              onChange={handleContentChange}
-              placeholder="Write your post content here..."
-            />
+            {loadingContent ? (
+              <div className="w-full h-64 bg-[var(--card-bg)] border border-[var(--border-primary)] rounded-md flex items-center justify-center">
+                <div className="flex items-center space-x-2 text-[var(--text-secondary)]">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[var(--accent-web)]"></div>
+                  <span>Loading post content...</span>
+                </div>
+              </div>
+            ) : (
+              <QuillEditor
+                value={formData.content}
+                onChange={handleContentChange}
+                placeholder="Write your post content here..."
+              />
+            )}
           </div>
 
           {/* Options */}
