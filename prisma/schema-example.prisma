@@ -1,0 +1,68 @@
+// EXAMPLE PRISMA SCHEMA for Cloud Storage + Database URLs approach
+// Add these models to your existing schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Your existing Post model - UPDATED to use URL instead of binary data
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  content     String   @db.Text
+  
+  // ✅ CORRECT: Store URL, not binary data
+  coverImageUrl String? @map("cover_image_url") // URL to cloud storage
+  
+  author      String
+  category    String
+  tags        String[]
+  slug        String   @unique
+  isFeatured  Boolean  @default(false)
+  isPublished Boolean  @default(false)
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  @@map("posts")
+}
+
+// OPTIONAL: Track uploaded images for management
+model UploadedImage {
+  id          String   @id @default(cuid())
+  filename    String
+  originalName String  @map("original_name")
+  url         String   // Cloud storage URL
+  size        Int      // File size in bytes
+  mimeType    String   @map("mime_type")
+  
+  // Optional: Link to posts that use this image
+  usedInPosts Post[]   @relation("PostImages")
+  
+  uploadedAt  DateTime @default(now()) @map("uploaded_at")
+  
+  @@map("uploaded_images")
+}
+
+// Your existing models remain the same
+model Subscriber {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  isActive    Boolean  @default(true)
+  subscribedAt DateTime @default(now()) @map("subscribed_at")
+  
+  @@map("subscribers")
+}
+
+// Add image relationship to posts if you want to track which images are used
+// Update Post model:
+// model Post {
+//   // ... existing fields ...
+//   images      UploadedImage[] @relation("PostImages")
+// } 
