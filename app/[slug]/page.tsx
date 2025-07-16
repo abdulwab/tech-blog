@@ -27,7 +27,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com'
+    // Safely handle the base URL with proper fallbacks
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 
+                   (typeof window !== 'undefined' ? window.location.origin : '') ||
+                   'http://localhost:3000'
     const postUrl = `${baseUrl}/${post.slug}`
 
     return {
