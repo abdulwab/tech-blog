@@ -180,7 +180,14 @@ export default async function BlogPostPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData),
+          __html: (() => {
+            try {
+              return JSON.stringify(structuredData)
+            } catch (error) {
+              console.error('Error serializing structured data:', error)
+              return '{}'
+            }
+          })(),
         }}
       />
 
