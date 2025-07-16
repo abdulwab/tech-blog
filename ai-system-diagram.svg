@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="500" height="300" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main flow boxes -->
+  <!-- In box -->
+  <rect x="20" y="40" width="60" height="40" rx="20" ry="20" fill="#f4b2a6" stroke="#e69584" stroke-width="2"/>
+  <text x="50" y="65" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#8b4513">In</text>
+  
+  <!-- LLM box -->
+  <rect x="180" y="40" width="80" height="40" rx="8" ry="8" fill="#c8e6c9" stroke="#a5d6a7" stroke-width="2"/>
+  <text x="220" y="65" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#2e7d32">LLM</text>
+  
+  <!-- Out box -->
+  <rect x="380" y="40" width="60" height="40" rx="20" ry="20" fill="#f4b2a6" stroke="#e69584" stroke-width="2"/>
+  <text x="410" y="65" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#8b4513">Out</text>
+  
+  <!-- Main flow arrows -->
+  <!-- In to LLM arrow -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+     refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+    </marker>
+    <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" 
+     refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#999" />
+    </marker>
+  </defs>
+  
+  <line x1="80" y1="60" x2="180" y2="60" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- LLM to Out arrow -->
+  <line x1="260" y1="60" x2="380" y2="60" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Bottom component boxes -->
+  <!-- Retrieval box -->
+  <rect x="40" y="220" width="80" height="40" rx="4" ry="4" fill="#e1bee7" stroke="#ce93d8" stroke-width="2"/>
+  <text x="80" y="245" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#6a1b9a">Retrieval</text>
+  
+  <!-- Tools box -->
+  <rect x="210" y="220" width="80" height="40" rx="4" ry="4" fill="#e1bee7" stroke="#ce93d8" stroke-width="2"/>
+  <text x="250" y="245" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#6a1b9a">Tools</text>
+  
+  <!-- Memory box -->
+  <rect x="380" y="220" width="80" height="40" rx="4" ry="4" fill="#e1bee7" stroke="#ce93d8" stroke-width="2"/>
+  <text x="420" y="245" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#6a1b9a">Memory</text>
+  
+  <!-- Labels above bottom components -->
+  <text x="80" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Query/</text>
+  <text x="80" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Results</text>
+  
+  <text x="250" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Call/</text>
+  <text x="250" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Response</text>
+  
+  <text x="420" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Read/</text>
+  <text x="420" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Write</text>
+  
+  <!-- Dotted lines connecting LLM to bottom components -->
+  <!-- LLM to Retrieval -->
+  <line x1="200" y1="80" x2="80" y2="220" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowhead-dashed)"/>
+  <line x1="80" y1="220" x2="200" y2="80" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowhead-dashed)"/>
+  
+  <!-- LLM to Tools -->
+  <line x1="220" y1="80" x2="250" y2="220" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowhead-dashed)"/>
+  <line x1="250" y1="220" x2="220" y2="80" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowhead-dashed)"/>
+  
+  <!-- LLM to Memory -->
+  <line x1="240" y1="80" x2="420" y2="220" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowhead-dashed)"/>
+  <line x1="420" y1="220" x2="240" y2="80" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowhead-dashed)"/>
+</svg> 
