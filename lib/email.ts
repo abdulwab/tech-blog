@@ -1,5 +1,8 @@
 import nodemailer from 'nodemailer'
 import { logActivity } from './activity'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 export interface EmailData {
   to: string[]
@@ -53,12 +56,23 @@ export async function sendEmail({ to, subject, html, text }: EmailData) {
           html,
           text: text || html.replace(/<[^>]*>/g, ''), // Strip HTML for text version
           headers: {
+            // Improved deliverability headers
             'List-Unsubscribe': `<${process.env.NEXT_PUBLIC_APP_URL}/api/subscribe?email=${encodeURIComponent(email)}&action=unsubscribe>`,
             'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
-          },
+            'X-Entity-Ref-ID': `blog-notification-${Date.now()}`,
+            'X-Mailer': 'Abdul Wahab Tech Blog',
+            'X-Priority': '3',
+            'Importance': 'normal',
+            'Auto-Submitted': 'auto-generated',
+            'Precedence': 'bulk',
+            'X-MC-Tags': 'transactional,blog-notification',
+            'Category': 'transactional',
+            'Return-Path': process.env.EMAIL_FROM,
+            'Errors-To': process.env.EMAIL_FROM,
+          } as any,
         })
 
-        results.push({ email, success: true, messageId: info.messageId })
+        results.push({ email, success: true, messageId: (info as any)?.messageId || 'unknown' })
       } catch (error) {
         console.error(`Failed to send email to ${email}:`, error)
         results.push({ email, success: false, error })
@@ -162,20 +176,22 @@ export function createNewPostEmailTemplate(data: NewPostEmailData): string {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 30px 20px;
-            text-align: center;
-            color: white;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px;
+            text-align: left;
+            color: #2d3748;
         }
         .header h1 {
             margin: 0;
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d3748;
         }
         .header p {
-            margin: 10px 0 0 0;
-            opacity: 0.9;
-            font-size: 16px;
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #718096;
         }
         .content {
             padding: 30px 20px;
@@ -274,8 +290,8 @@ export function createNewPostEmailTemplate(data: NewPostEmailData): string {
 <body>
     <div class="container">
         <div class="header">
-            <h1>📚 Abdul Wahab</h1>
-            <p>Published just for you!</p>
+            <h1>New article published</h1>
+            <p>Abdul Wahab • Tech Blog</p>
         </div>
         
         <div class="content">
@@ -451,6 +467,70 @@ export async function sendNewsletterEmail(newsletterData: NewsletterEmailData, s
     subject: newsletterData.subject,
     html
   })
+}
+
+// Create transactional-style subject lines for better inbox placement
+export function createTransactionalSubject(title: string, author: string): string {
+  // Avoid promotional keywords and make it more personal/notification-like
+  const subjects = [
+    `New post: ${title}`,
+    `${author} published: ${title}`,
+    `Article update: ${title}`,
+    `Blog notification: ${title}`,
+    `${title} - New from ${author}`
+  ];
+  
+  // Return the first one for consistency, but you could randomize
+  return subjects[0];
+}
+
+// Send blog notification with improved deliverability
+export async function sendBlogNotification(postData: NewPostEmailData) {
+  try {
+    // Get all active subscribers
+    const subscribers = await prisma.subscriber.findMany({
+      where: { isActive: true },
+      select: { email: true }
+    })
+
+    if (subscribers.length === 0) {
+      return { success: true, message: 'No active subscribers to notify' }
+    }
+
+    // Create transactional subject
+    const subject = createTransactionalSubject(postData.title, postData.author)
+    
+    // Create email content
+    const htmlContent = createNewPostEmailTemplate(postData)
+    const textContent = `
+New Article Published
+
+${postData.title}
+By ${postData.author}
+
+${postData.description}
+
+Read the full article: ${process.env.NEXT_PUBLIC_APP_URL}/${postData.slug}
+
+---
+
+This is an automated notification from Abdul Wahab's Tech Blog.
+To unsubscribe: ${process.env.NEXT_PUBLIC_APP_URL}/api/subscribe?action=unsubscribe
+    `.trim()
+
+    // Send emails with improved deliverability
+    const result = await sendEmail({
+      to: subscribers.map(sub => sub.email),
+      subject,
+      html: htmlContent,
+      text: textContent
+    })
+
+    return result
+  } catch (error) {
+    console.error('Error sending blog notification:', error)
+    return { success: false, error }
+  }
 }
 
  
