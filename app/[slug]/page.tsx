@@ -126,7 +126,12 @@ export default async function BlogPostPage({ params }: PageProps) {
     discord: 'https://discord.gg/VkAW9rEn'
   }
 
-  const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${post.slug}`
+  // Safely handle the base URL with proper fallbacks
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 
+                 (typeof window !== 'undefined' ? window.location.origin : '') ||
+                 'http://localhost:3000'
+  
+  const shareUrl = `${baseUrl}/${post.slug}`
   const shareText = `Check out this article: ${post.title}`
 
   // Calculate reading time
@@ -148,7 +153,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       name: 'Abdul Wahab',
       logo: {
         '@type': 'ImageObject',
-        url: `${process.env.NEXT_PUBLIC_APP_URL}/default-avatar.svg`,
+        url: `${baseUrl}/default-avatar.svg`,
       },
     },
     datePublished: post.createdAt.toISOString(),
