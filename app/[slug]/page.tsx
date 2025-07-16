@@ -8,6 +8,9 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Twitter, Linkedin, Facebook } from 'lucide-react'
 import { formatCategory, calculateReadingTime } from '@/lib/utils'
 
+// Force dynamic rendering to avoid build-time issues
+export const dynamic = 'force-dynamic'
+
 interface PageProps {
   params: {
     slug: string
