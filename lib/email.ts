@@ -145,7 +145,7 @@ export interface NewsletterEmailData {
   unsubscribeUrl: string
 }
 
-// Create beautiful HTML email template for new posts
+// Create modern email template with full post content
 export function createNewPostEmailTemplate(data: NewPostEmailData): string {
   const { title, description, slug, coverImage, author, category, publishedAt } = data
   const postUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${slug}`
@@ -161,179 +161,269 @@ export function createNewPostEmailTemplate(data: NewPostEmailData): string {
     <title>${title}</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #333;
-            max-width: 600px;
+            color: #374151;
+            max-width: 680px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f8fafc;
+            padding: 0;
+            background-color: #ffffff;
         }
         .container {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            margin: 0;
+            padding: 0;
         }
         .header {
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 20px;
-            text-align: left;
-            color: #2d3748;
+            text-align: center;
+            padding: 40px 20px 20px 20px;
+            border-bottom: 1px solid #e5e7eb;
         }
-        .header h1 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 600;
-            color: #2d3748;
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+            text-decoration: none;
         }
-        .header p {
-            margin: 5px 0 0 0;
+        .tagline {
             font-size: 14px;
-            color: #718096;
+            color: #6b7280;
+            margin: 0;
         }
         .content {
-            padding: 30px 20px;
+            padding: 40px 20px;
         }
         .post-image {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         .post-title {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: 700;
-            color: #1a202c;
-            margin: 0 0 15px 0;
-            line-height: 1.3;
+            color: #111827;
+            margin: 0 0 20px 0;
+            line-height: 1.2;
         }
         .post-meta {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .author-name {
+            font-weight: 600;
+            color: #374151;
             font-size: 14px;
-            color: #718096;
+        }
+        .post-date {
+            color: #6b7280;
+            font-size: 14px;
         }
         .category-badge {
-            background: #667eea;
-            color: white;
+            background: #dbeafe;
+            color: #1e40af;
             padding: 4px 12px;
-            border-radius: 20px;
+            border-radius: 16px;
             font-size: 12px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .post-description {
+        .post-content {
             font-size: 16px;
-            color: #4a5568;
-            margin-bottom: 30px;
-            line-height: 1.6;
+            line-height: 1.7;
+            color: #374151;
+        }
+        .post-content h1, .post-content h2, .post-content h3 {
+            color: #111827;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .post-content h1 { font-size: 28px; }
+        .post-content h2 { font-size: 24px; }
+        .post-content h3 { font-size: 20px; }
+        .post-content p {
+            margin-bottom: 16px;
+        }
+        .post-content ul, .post-content ol {
+            margin-bottom: 16px;
+            padding-left: 20px;
+        }
+        .post-content li {
+            margin-bottom: 8px;
+        }
+        .post-content blockquote {
+            border-left: 4px solid #3b82f6;
+            margin: 20px 0;
+            padding: 12px 20px;
+            background: #f8fafc;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        .post-content code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            color: #e11d48;
+        }
+        .post-content pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        .post-content pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        .cta-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px 20px;
+            background: #f9fafb;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+        .cta-text {
+            color: #6b7280;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
         .cta-button {
             display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 15px 30px;
+            background: #3b82f6;
+            color: white !important;
+            padding: 12px 28px;
             text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 14px;
             transition: background-color 0.3s;
         }
         .cta-button:hover {
-            background: #5a67d8;
+            background: #2563eb;
         }
         .footer {
-            background: #f7fafc;
+            background: #f9fafb;
             padding: 30px 20px;
             text-align: center;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 40px;
         }
-        .footer p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #718096;
+        .footer-links {
+            margin-bottom: 15px;
         }
-        .footer a {
-            color: #667eea;
+        .footer-links a {
+            color: #6b7280;
             text-decoration: none;
-        }
-        .social-links {
-            margin: 20px 0;
-        }
-        .social-links a {
-            display: inline-block;
-            margin: 0 10px;
-            color: #667eea;
-            text-decoration: none;
+            margin: 0 15px;
             font-size: 14px;
+        }
+        .footer-text {
+            color: #9ca3af;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        .unsubscribe {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 12px;
         }
         @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            .header h1 {
+            .post-title {
                 font-size: 24px;
             }
-            .post-title {
-                font-size: 20px;
-            }
             .content {
-                padding: 20px 15px;
+                padding: 30px 15px;
+            }
+            .post-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        
+        <!-- Header -->
         <div class="header">
-            <h1>New article published</h1>
-            <p>Abdul Wahab • Tech Blog</p>
+            <a href="${blogUrl}" class="logo">Abdul Wahab</a>
+            <p class="tagline">Tech insights and tutorials</p>
         </div>
-        
+
+        <!-- Main Content -->
         <div class="content">
-        <h2 class="post-title">${title}</h2>
-            <img src="${coverImage}" alt="${title}" class="post-image" />
             
+            <!-- Cover Image -->
+            <img src="${coverImage}" alt="${title}" class="post-image">
             
+            <!-- Post Title -->
+            <h1 class="post-title">${title}</h1>
             
+            <!-- Post Meta -->
             <div class="post-meta">
-                <span>✍️ By ${author}</span>
+                <div class="author-info">
+                    <span class="author-name">By ${author}</span>
+                </div>
+                <span class="post-date">${new Date(publishedAt || new Date()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                 <span class="category-badge">${category}</span>
-                ${publishedAt ? `<span>📅 ${new Date(publishedAt).toLocaleDateString()}</span>` : ''}
             </div>
             
-            <p class="post-description">${description}</p>
+            <!-- Post Content -->
+            <div class="post-content">
+                ${description}
+            </div>
             
-            <a href="${postUrl}" class="cta-button">Read Full Article →</a>
+            <!-- Call to Action -->
+            <div class="cta-section">
+                <p class="cta-text">Continue reading on the website for the full experience</p>
+                <a href="${postUrl}" class="cta-button">View on Website</a>
+            </div>
+            
         </div>
-        
+
+        <!-- Footer -->
         <div class="footer">
-            <p><strong>Thanks for being a subscriber!</strong></p>
-            <p>You're receiving this because you subscribed to our newsletter.</p>
-            
-            <div class="social-links">
-                <a href="${blogUrl}">Browse All Posts</a> •
-                <a href="${postUrl}">Read Article</a> •
-                <a href="${unsubscribeUrl}">Unsubscribe</a>
+            <div class="footer-links">
+                <a href="${blogUrl}">Blog</a>
+                <a href="${blogUrl}/about">About</a>
+                <a href="${blogUrl}/contact">Contact</a>
             </div>
-            
-            <p style="margin-top: 20px; font-size: 12px;">
-                © ${new Date().getFullYear()} Abdul Wahab. All rights reserved.<br>
-                <a href="${unsubscribeUrl}">Unsubscribe</a> from future emails.
+            <p class="footer-text">
+                You're receiving this because you subscribed to Abdul Wahab's Tech Blog.<br>
+                <a href="${unsubscribeUrl}" class="unsubscribe">Unsubscribe</a> • 
+                <a href="${postUrl}" class="unsubscribe">View in browser</a>
             </p>
         </div>
+        
     </div>
 </body>
 </html>`
 }
 
-// Create newsletter template
+// Newsletter template
 export function createNewsletterTemplate(data: NewsletterEmailData): string {
   const { subject, content, unsubscribeUrl } = data
+  const blogUrl = `${process.env.NEXT_PUBLIC_APP_URL}/blog`
   
   return `
 <!DOCTYPE html>
@@ -372,30 +462,14 @@ export function createNewsletterTemplate(data: NewsletterEmailData): string {
         .content {
             padding: 30px 20px;
         }
-        .newsletter-content {
-            font-size: 16px;
-            line-height: 1.8;
-        }
-        .newsletter-content h1, .newsletter-content h2, .newsletter-content h3 {
-            color: #1a202c;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        .newsletter-content p {
-            margin-bottom: 15px;
-        }
-        .newsletter-content a {
-            color: #667eea;
-            text-decoration: none;
-        }
-        .newsletter-content a:hover {
-            text-decoration: underline;
-        }
         .footer {
             background: #f7fafc;
             padding: 30px 20px;
             text-align: center;
             border-top: 1px solid #e2e8f0;
+        }
+        .footer p {
+            margin: 5px 0;
             font-size: 14px;
             color: #718096;
         }
@@ -408,23 +482,25 @@ export function createNewsletterTemplate(data: NewsletterEmailData): string {
 <body>
     <div class="container">
         <div class="header">
-            <h1>📧 ${subject}</h1>
+            <h1>📧 Newsletter</h1>
+            <p>Abdul Wahab's Tech Updates</p>
         </div>
         
         <div class="content">
-            <div class="newsletter-content">
-                ${content}
-            </div>
+            ${content}
         </div>
         
         <div class="footer">
-            <p><strong>Thanks for reading!</strong></p>
-            <p>© ${new Date().getFullYear()} Abdul Wahab. All rights reserved.</p>
-            <p><a href="${unsubscribeUrl}">Unsubscribe</a> from future emails.</p>
+            <p>You're receiving this newsletter because you subscribed to Abdul Wahab's Tech Blog.</p>
+            <p>
+                <a href="${unsubscribeUrl}">Unsubscribe</a> | 
+                <a href="${blogUrl}">Visit Blog</a>
+            </p>
         </div>
     </div>
 </body>
-</html>`
+</html>
+  `
 }
 
 // Quick send function for new post notifications
@@ -500,7 +576,7 @@ export async function sendBlogNotification(postData: NewPostEmailData) {
     // Create transactional subject
     const subject = createTransactionalSubject(postData.title, postData.author)
     
-    // Create email content
+    // Create email content  
     const htmlContent = createNewPostEmailTemplate(postData)
     const textContent = `
 New Article Published
