@@ -6,6 +6,9 @@ export default async function CheckRolePage() {
   const userRole = await getCurrentUserRole()
   const user = await getCurrentUser()
 
+  // Check if user is signed in but not in database yet
+  const isNewUser = !user && userRole === null
+
   const getRoleInfo = (role: string | null) => {
     switch (role) {
       case 'ADMIN':
@@ -51,6 +54,29 @@ export default async function CheckRolePage() {
             Back to Blog
           </Link>
         </div>
+
+        {isNewUser && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+            <h2 className="text-lg font-semibold text-blue-800 mb-3">🎉 Welcome! Account Setup Required</h2>
+            <p className="text-blue-700 mb-4">
+              You've successfully signed in! Your account needs to be synced to our database and assigned a role.
+            </p>
+            <div className="space-y-2 text-sm text-blue-600">
+              <p><strong>Next steps:</strong></p>
+              <p>1. Your account will be automatically synced when you visit any protected page</p>
+              <p>2. You'll start with VIEWER role (read-only access)</p>
+              <p>3. Contact an admin to upgrade your role if needed</p>
+            </div>
+            <div className="mt-4">
+              <Link 
+                href="/admin" 
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Sync Account & Check Admin Access
+              </Link>
+            </div>
+          </div>
+        )}
 
         <div className="bg-white rounded-lg border border-gray-200 p-8">
           <div className="text-center mb-8">
