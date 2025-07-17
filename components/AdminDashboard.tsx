@@ -27,7 +27,7 @@ import SubscribersManager from './admin/SubscribersManager'
 import AdminStats from './admin/AdminStats'
 import Tooltip from './Tooltip'
 
-type Tab = 'overview' | 'posts' | 'categories' | 'notifications' | 'subscribers' | 'settings'
+type Tab = 'overview' | 'posts' | 'categories' | 'notifications' | 'subscribers' | 'users' | 'settings'
 
 interface AdminDashboardProps {
   initialTab?: Tab
@@ -67,6 +67,7 @@ export default function AdminDashboard({ initialTab = 'overview' }: AdminDashboa
     { id: 'categories', label: 'Categories', icon: Tag },
     { id: 'notifications', label: 'Notifications', icon: Mail },
     { id: 'subscribers', label: 'Subscribers', icon: Users },
+    { id: 'users', label: 'Users', icon: Users },
     { id: 'settings', label: 'Settings', icon: Settings }
   ]
 
