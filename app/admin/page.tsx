@@ -1,8 +1,7 @@
-import { SignedIn, SignedOut, SignInButton } from '@clerk/nextjs/server'
-import AdminDashboard from '@/components/AdminDashboard'
 import { Shield, AlertTriangle } from 'lucide-react'
 import { getCurrentUserRole } from '@/lib/auth'
-import { redirect } from 'next/navigation'
+import AdminDashboard from '@/components/AdminDashboard'
+import { SignInButton } from '@clerk/nextjs'
 
 export default async function AdminPage() {
   const userRole = await getCurrentUserRole()
@@ -11,33 +10,31 @@ export default async function AdminPage() {
   if (!userRole) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
-        <SignedOut>
-          <div className="max-w-md w-full space-y-8 p-8">
-            <div className="text-center">
-              <div className="flex justify-center mb-6">
-                <div className="bg-[var(--accent-web)]/10 p-3 rounded-full">
-                  <Shield className="h-12 w-12 text-[var(--accent-web)]" />
-                </div>
+        <div className="max-w-md w-full space-y-8 p-8">
+          <div className="text-center">
+            <div className="flex justify-center mb-6">
+              <div className="bg-[var(--accent-web)]/10 p-3 rounded-full">
+                <Shield className="h-12 w-12 text-[var(--accent-web)]" />
               </div>
-              <h2 className="text-3xl font-extrabold text-[var(--text-primary)]">
-                Admin Access Required
-              </h2>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                Please sign in to access the admin dashboard
-              </p>
             </div>
-            <div className="mt-8 space-y-6">
-              <div className="text-center">
-                <SignInButton>
-                  <button className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-[var(--accent-web)] hover:bg-[var(--accent-web-dark)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--accent-web)] focus:ring-offset-[var(--background)] transition-colors">
-                    <Shield className="h-5 w-5 mr-2" />
-                    Sign In to Admin
-                  </button>
-                </SignInButton>
-              </div>
+            <h2 className="text-3xl font-extrabold text-[var(--text-primary)]">
+              Admin Access Required
+            </h2>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+              Please sign in to access the admin dashboard
+            </p>
+          </div>
+          <div className="mt-8 space-y-6">
+            <div className="text-center">
+              <SignInButton>
+                <button className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-[var(--accent-web)] hover:bg-[var(--accent-web-dark)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--accent-web)] focus:ring-offset-[var(--background)] transition-colors">
+                  <Shield className="h-5 w-5 mr-2" />
+                  Sign In to Admin
+                </button>
+              </SignInButton>
             </div>
           </div>
-        </SignedOut>
+        </div>
       </div>
     )
   }
@@ -84,9 +81,7 @@ export default async function AdminPage() {
   // User has admin or writer access
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <SignedIn>
-        <AdminDashboard />
-      </SignedIn>
+      <AdminDashboard />
     </div>
   )
 }
