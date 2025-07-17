@@ -1,7 +1,7 @@
 import { Shield, AlertTriangle } from 'lucide-react'
 import { getCurrentUserRole } from '@/lib/auth'
 import AdminDashboard from '@/components/AdminDashboard'
-import { SignInButton } from '@clerk/nextjs'
+import Link from 'next/link'
 
 export default async function AdminPage() {
   const userRole = await getCurrentUserRole()
@@ -26,12 +26,10 @@ export default async function AdminPage() {
           </div>
           <div className="mt-8 space-y-6">
             <div className="text-center">
-              <SignInButton>
-                <button className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-[var(--accent-web)] hover:bg-[var(--accent-web-dark)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--accent-web)] focus:ring-offset-[var(--background)] transition-colors">
-                  <Shield className="h-5 w-5 mr-2" />
-                  Sign In to Admin
-                </button>
-              </SignInButton>
+              <Link href="/sign-in?redirect_url=/admin" className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-[var(--accent-web)] hover:bg-[var(--accent-web-dark)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--accent-web)] focus:ring-offset-[var(--background)] transition-colors">
+                <Shield className="h-5 w-5 mr-2" />
+                Sign In to Admin
+              </Link>
             </div>
           </div>
         </div>
