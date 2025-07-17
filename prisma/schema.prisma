@@ -10,6 +10,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique // Clerk user ID
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+  role      UserRole @default(VIEWER)
+  isActive  Boolean  @default(true)
+  lastSignIn DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  posts     Post[]
+  activities ActivityLog[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN    // Full access to everything
+  WRITER   // Can create/edit posts, limited admin access
+  VIEWER   // Can only view content, no admin access
+}
+
 model Post {
   id          String   @id @default(cuid())
   title       String
@@ -24,6 +50,10 @@ model Post {
   author      String
   category    String
   tags        String[] @default([])
+  
+  // Relations
+  authorId    String?  // User who created the post
+  authorUser  User?    @relation(fields: [authorId], references: [id])
 
   @@map("posts")
 }
