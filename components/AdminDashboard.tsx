@@ -24,6 +24,7 @@ import PostsManager from './admin/PostsManager'
 import CategoriesManager from './admin/CategoriesManager'
 import NotificationsManager from './admin/NotificationsManager'
 import SubscribersManager from './admin/SubscribersManager'
+import UsersManager from './admin/UsersManager'
 import AdminStats from './admin/AdminStats'
 import Tooltip from './Tooltip'
 
@@ -83,6 +84,8 @@ export default function AdminDashboard({ initialTab = 'overview' }: AdminDashboa
         return <NotificationsManager />
       case 'subscribers':
         return <SubscribersManager />
+      case 'users':
+        return <UsersManager />
       case 'settings':
         return <AdminSettings />
       default:
