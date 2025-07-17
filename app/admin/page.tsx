@@ -1,16 +1,17 @@
-import { SignedIn, SignedOut, SignInButton } from '@clerk/nextjs'
+import { SignedIn, SignedOut, SignInButton } from '@clerk/nextjs/server'
 import AdminDashboard from '@/components/AdminDashboard'
-import { Shield } from 'lucide-react'
+import { Shield, AlertTriangle } from 'lucide-react'
+import { getCurrentUserRole } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 
-export default function AdminPage() {
-  return (
-    <div className="min-h-screen bg-[var(--background)]">
-      <SignedIn>
-        <AdminDashboard />
-      </SignedIn>
+export default async function AdminPage() {
+  const userRole = await getCurrentUserRole()
 
-      <SignedOut>
-        <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
+  // If user is not signed in, show sign-in prompt
+  if (!userRole) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
+        <SignedOut>
           <div className="max-w-md w-full space-y-8 p-8">
             <div className="text-center">
               <div className="flex justify-center mb-6">
@@ -36,8 +37,56 @@ export default function AdminPage() {
               </div>
             </div>
           </div>
+        </SignedOut>
+      </div>
+    )
+  }
+
+  // Check if user has admin or writer access
+  if (userRole === 'VIEWER') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
+        <div className="max-w-md w-full space-y-8 p-8">
+          <div className="text-center">
+            <div className="flex justify-center mb-6">
+              <div className="bg-red-100 p-3 rounded-full">
+                <AlertTriangle className="h-12 w-12 text-red-600" />
+              </div>
+            </div>
+            <h2 className="text-3xl font-extrabold text-[var(--text-primary)]">
+              Access Denied
+            </h2>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+              You don't have permission to access the admin dashboard.
+            </p>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+              Your current role: <span className="font-medium text-gray-600">{userRole}</span>
+            </p>
+            <p className="mt-4 text-sm text-[var(--text-secondary)]">
+              Contact an administrator to request access.
+            </p>
+          </div>
+          <div className="mt-8 space-y-6">
+            <div className="text-center">
+              <a
+                href="/"
+                className="group relative w-full flex justify-center py-3 px-4 border border-gray-300 text-sm font-medium rounded-lg text-[var(--text-primary)] bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--accent-web)] focus:ring-offset-[var(--background)] transition-colors"
+              >
+                Back to Blog
+              </a>
+            </div>
+          </div>
         </div>
-      </SignedOut>
+      </div>
+    )
+  }
+
+  // User has admin or writer access
+  return (
+    <div className="min-h-screen bg-[var(--background)]">
+      <SignedIn>
+        <AdminDashboard />
+      </SignedIn>
     </div>
   )
-} 
+}
