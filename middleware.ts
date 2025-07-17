@@ -29,23 +29,10 @@ export default clerkMiddleware(async (auth, req) => {
     // Role checking is handled in the page component
   }
 
-  // Auto-sync user on any authenticated request
-  if (userId) {
-    try {
-      // Fire-and-forget sync call
-      fetch(new URL('/api/users/sync', req.url), {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${userId}`,
-          'Cookie': req.headers.get('Cookie') || ''
-        }
-      }).catch(() => {
-        // Ignore sync errors to not block the request
-      })
-    } catch (error) {
-      // Ignore sync errors
-    }
-  }
+  // Note: User sync is handled via:
+  // 1. Manual sync at /api/users/sync 
+  // 2. Webhook sync at /api/webhooks/clerk
+  // 3. "Sync Account" button on /check-role page
 })
 
 export const config = {

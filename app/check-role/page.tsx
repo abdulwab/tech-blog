@@ -1,13 +1,16 @@
 import { getCurrentUserRole, getCurrentUser } from '@/lib/auth'
 import { Shield, Edit3, Eye, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { auth } from '@clerk/nextjs/server'
+import SyncUserButton from '@/components/SyncUserButton'
 
 export default async function CheckRolePage() {
+  const { userId } = auth() // Check if user is signed in with Clerk
   const userRole = await getCurrentUserRole()
   const user = await getCurrentUser()
 
-  // Check if user is signed in but not in database yet
-  const isNewUser = !user && userRole === null
+  // Check if user is signed in with Clerk but not in our database yet
+  const isNewUser = userId && !user && userRole === null
 
   const getRoleInfo = (role: string | null) => {
     switch (role) {
@@ -63,17 +66,16 @@ export default async function CheckRolePage() {
             </p>
             <div className="space-y-2 text-sm text-blue-600">
               <p><strong>Next steps:</strong></p>
-              <p>1. Your account will be automatically synced when you visit any protected page</p>
+              <p>1. Click "Sync Account" button below to add yourself to our database</p>
               <p>2. You'll start with VIEWER role (read-only access)</p>
-              <p>3. Contact an admin to upgrade your role if needed</p>
+              <p>3. Contact an admin to upgrade your role to WRITER or ADMIN if needed</p>
             </div>
             <div className="mt-4">
-              <Link 
-                href="/admin" 
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              <SyncUserButton 
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
               >
-                Sync Account & Check Admin Access
-              </Link>
+                Sync Account to Database
+              </SyncUserButton>
             </div>
           </div>
         )}
