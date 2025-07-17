@@ -5,10 +5,10 @@ const isAdminRoute = createRouteMatcher(['/admin(.*)'])
 const isApiAdminRoute = createRouteMatcher(['/api/admin(.*)'])
 
 export default clerkMiddleware(async (auth, req) => {
+  const { userId } = auth()
+  
   // Handle admin routes
   if (isAdminRoute(req) || isApiAdminRoute(req)) {
-    const { userId } = auth()
-    
     if (!userId) {
       // Redirect to sign-in for unauthenticated users
       return NextResponse.redirect(new URL('/sign-in', req.url))
