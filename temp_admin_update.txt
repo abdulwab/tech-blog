@@ -1,0 +1,12 @@
+import UsersManager from './admin/UsersManager'
+
+// Add to the tabs array (after line 69):
+    { id: 'users', label: 'Users', icon: Users },
+
+// Add to the renderContent switch statement (after the subscribers case):
+      case 'users':
+        return <UsersManager />
+
+// Add to the getTabDescription function (after the subscribers case):
+                  case 'users':
+                    return 'Manage user accounts and roles'
