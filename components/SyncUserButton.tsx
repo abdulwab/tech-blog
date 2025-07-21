@@ -24,12 +24,12 @@ export default function SyncUserButton({ className, children }: SyncUserButtonPr
 
       if (response.ok) {
         const data = await response.json()
-        setMessage(`✅ Account ${data.action} successfully!`)
+        setMessage(`✅ Account ${data.action} successfully! Role: ${data.role}`)
         
         // Refresh the page to show updated role info
         setTimeout(() => {
           router.refresh()
-        }, 1000)
+        }, 1500)
       } else {
         const error = await response.json()
         setMessage(`❌ Error: ${error.error}`)
