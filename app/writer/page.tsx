@@ -1,14 +1,17 @@
-import { Shield, AlertTriangle, Edit3, ArrowLeft } from 'lucide-react'
+import { Shield, AlertTriangle, Edit3, ArrowLeft, UserPlus } from 'lucide-react'
 import { getCurrentUserRole, getCurrentUser } from '@/lib/auth'
 import Link from 'next/link'
 import WriterDashboard from '@/components/WriterDashboard'
+import { auth } from '@clerk/nextjs/server'
+import SyncUserButton from '@/components/SyncUserButton'
 
 export default async function WriterPage() {
+  const { userId } = auth()
   const userRole = await getCurrentUserRole()
   const user = await getCurrentUser()
 
   // If user is not signed in, show sign-in prompt
-  if (!userRole || !user) {
+  if (!userId) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
         <div className="max-w-md w-full space-y-8 p-8">
@@ -30,6 +33,42 @@ export default async function WriterPage() {
               <Link href="/sign-in?redirect_url=/writer" className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-colors">
                 <Edit3 className="h-5 w-5 mr-2" />
                 Sign In to Write
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // If user is signed in but not in database, show sync prompt
+  if (userId && !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
+        <div className="max-w-md w-full space-y-8 p-8">
+          <div className="text-center">
+            <div className="flex justify-center mb-6">
+              <div className="bg-blue-100 p-3 rounded-full">
+                <UserPlus className="h-12 w-12 text-blue-600" />
+              </div>
+            </div>
+            <h2 className="text-3xl font-extrabold text-[var(--text-primary)]">
+              Account Setup Required
+            </h2>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+              Your account needs to be synced to our database before accessing writer features.
+            </p>
+          </div>
+          <div className="mt-8 space-y-6">
+            <div className="text-center">
+              <SyncUserButton className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-colors">
+                <UserPlus className="h-5 w-5 mr-2" />
+                Sync My Account
+              </SyncUserButton>
+            </div>
+            <div className="text-center">
+              <Link href="/check-role" className="text-sm text-blue-600 hover:text-blue-700">
+                Check my role status
               </Link>
             </div>
           </div>
