@@ -118,6 +118,16 @@ export default async function WriterPage() {
   }
 
   // User has writer or admin access
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-600">Loading user data...</h2>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <WriterDashboard user={user} />
